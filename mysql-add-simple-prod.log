@@ -1,262 +1,56 @@
 INSERT INTO `wp_posts` (`post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_content_filtered`, `post_title`, `post_excerpt`, `post_status`, `post_type`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_parent`, `menu_order`, `post_mime_type`, `guid`) VALUES (1, '2017-06-02 09:56:00', '0000-00-00 00:00:00', '', '', 'Черновик', '', 'auto-draft', 'product', 'open', 'open', '', '', '', '', '2017-06-02 09:56:00', '0000-00-00 00:00:00', 0, 0, '', '')
 UPDATE `wp_posts` SET `guid` = 'http://10.0.3.94/?post_type=product&p=45' WHERE `ID` = 45
-
-		   37 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991376', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   37 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   37 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   37 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_doing_cron', '1496386576.8562688827514648437500', 'yes') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   39 Query	UPDATE `wp_options` SET `option_value` = 'a:10:{i:1496386560;a:1:{s:30:\"wp_scheduled_auto_draft_delete\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1496390045;a:1:{s:32:\"woocommerce_cancel_unpaid_orders\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:2:{s:8:\"schedule\";b:0;s:4:\"args\";a:0:{}}}}i:1496391946;a:1:{s:19:\"wp_scheduled_delete\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1496416870;a:3:{s:16:\"wp_version_check\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}s:17:\"wp_update_plugins\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}s:16:\"wp_update_themes\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}}i:1496429645;a:1:{s:28:\"woocommerce_cleanup_sessions\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}}i:1496458800;a:1:{s:27:\"woocommerce_scheduled_sales\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1496472845;a:1:{s:30:\"woocommerce_tracker_send_event\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1496472960;a:1:{s:30:\"wp_scheduled_auto_draft_delete\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1499126400;a:1:{s:25:\"woocommerce_geoip_updater\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:7:\"monthly\";s:4:\"args\";a:0:{}s:8:\"interval\";i:2635200;}}}s:7:\"version\";i:2;}' WHERE `option_name` = 'cron'
-		   39 Query	UPDATE `wp_options` SET `option_value` = 'a:9:{i:1496390045;a:1:{s:32:\"woocommerce_cancel_unpaid_orders\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:2:{s:8:\"schedule\";b:0;s:4:\"args\";a:0:{}}}}i:1496391946;a:1:{s:19:\"wp_scheduled_delete\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1496416870;a:3:{s:16:\"wp_version_check\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}s:17:\"wp_update_plugins\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}s:16:\"wp_update_themes\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}}i:1496429645;a:1:{s:28:\"woocommerce_cleanup_sessions\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:10:\"twicedaily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:43200;}}}i:1496458800;a:1:{s:27:\"woocommerce_scheduled_sales\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1496472845;a:1:{s:30:\"woocommerce_tracker_send_event\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1496472960;a:1:{s:30:\"wp_scheduled_auto_draft_delete\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:5:\"daily\";s:4:\"args\";a:0:{}s:8:\"interval\";i:86400;}}}i:1499126400;a:1:{s:25:\"woocommerce_geoip_updater\";a:1:{s:32:\"40cd750bba9870f18aada2478b24840a\";a:3:{s:8:\"schedule\";s:7:\"monthly\";s:4:\"args\";a:0:{}s:8:\"interval\";i:2635200;}}}s:7:\"version\";i:2;}' WHERE `option_name` = 'cron'
-
-		   39 Query	DELETE FROM `wp_options` WHERE `option_name` = '_transient_doing_cron'
-
-		   37 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_edit_last', '1')
-
-		   37 Query	UPDATE `wp_posts` SET `post_author` = 1, `post_date` = '2017-06-02 09:56:17', `post_date_gmt` = '0000-00-00 00:00:00', `post_content` = '', `post_content_filtered` = '', `post_title` = 'test', `post_excerpt` = '', `post_status` = 'draft', `post_type` = 'product', `comment_status` = 'open', `ping_status` = 'closed', `post_password` = '', `post_name` = '', `to_ping` = '', `pinged` = '', `post_modified` = '2017-06-02 09:56:17', `post_modified_gmt` = '2017-06-02 06:56:17', `post_parent` = 0, `menu_order` = 0, `post_mime_type` = '', `guid` = 'http://10.0.3.94/?post_type=product&#038;p=45' WHERE `ID` = 45
-
-		   37 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_edit_lock', '1496386577:1')
-
-		   41 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991377', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   41 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-170602  6:56:18	   
-41 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   43 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991407', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   43 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-170602  6:56:48	   43 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-170602  6:57:14	   45 Query	SELECT option_value FROM wp_options WHERE option_name = '_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.' LIMIT 1
-		   
-		   45 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991434', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   45 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   45 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   45 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_product_attributes', 'a:1:{s:12:\"attr-product\";a:6:{s:4:\"name\";s:12:\"Attr product\";s:5:\"value\";s:10:\"attr value\";s:8:\"position\";s:1:\"0\";s:10:\"is_visible\";i:1;s:12:\"is_variation\";i:0;s:11:\"is_taxonomy\";i:0;}}')
-
-		   47 Query	UPDATE `wp_postmeta` SET `meta_value` = '1496386634:1' WHERE `post_id` = 45 AND `meta_key` = '_edit_lock'
-
-		   51 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991436', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   49 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991436', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   51 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   49 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   49 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991436', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   49 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   51 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   53 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991496', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   53 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   53 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   53 Query	UPDATE `wp_postmeta` SET `meta_value` = '1' WHERE `post_id` = 45 AND `meta_key` = '_edit_last'
-
-		   53 Query	UPDATE `wp_posts` SET `post_author` = 1, `post_date` = '2017-06-02 09:58:16', `post_date_gmt` = '0000-00-00 00:00:00', `post_content` = 'test desc', `post_content_filtered` = '', `post_title` = 'test', `post_excerpt` = '', `post_status` = 'draft', `post_type` = 'product', `comment_status` = 'open', `ping_status` = 'closed', `post_password` = '', `post_name` = '', `to_ping` = '', `pinged` = '', `post_modified` = '2017-06-02 09:58:16', `post_modified_gmt` = '2017-06-02 06:58:16', `post_parent` = 0, `menu_order` = 0, `post_mime_type` = '', `guid` = 'http://10.0.3.94/?post_type=product&#038;p=45' WHERE `ID` = 45
-
-		   53 Query	UPDATE `wp_postmeta` SET `meta_value` = '1496386696:1' WHERE `post_id` = 45 AND `meta_key` = '_edit_lock'
-
-		   55 Query	UPDATE `wp_postmeta` SET `meta_value` = '1' WHERE `post_id` = 45 AND `meta_key` = '_edit_last'
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_visibility', 'visible')
-		   55 Query	DELETE FROM wp_options WHERE option_name LIKE '\\_transient\\_%1437813232' ORDER BY option_id LIMIT 1000
-
-		   55 Query	UPDATE `wp_options` SET `option_value` = '1496386750' WHERE `option_name` = '_transient_product_query-transient-version'
-		   55 Query	DELETE FROM `wp_options`
-				WHERE `option_name` LIKE ('\_transient\_wc\_uf\_pid\_%')
-				OR `option_name` LIKE ('\_transient\_timeout\_wc\_uf\_pid\_%')
-				OR `option_name` LIKE ('\_transient\_wc\_products\_will\_display\_%')
-				OR `option_name` LIKE ('\_transient\_timeout\_wc\_products\_will\_display\_%')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_stock_status', 'instock')
-
-		   55 Query	DELETE FROM wp_options WHERE option_name LIKE '\\_transient\\_%1496386750' ORDER BY option_id LIMIT 1000
-
-		   55 Query	DELETE FROM `wp_options`
-				WHERE `option_name` LIKE ('\_transient\_wc\_uf\_pid\_%')
-				OR `option_name` LIKE ('\_transient\_timeout\_wc\_uf\_pid\_%')
-				OR `option_name` LIKE ('\_transient\_wc\_products\_will\_display\_%')
-				OR `option_name` LIKE ('\_transient\_timeout\_wc\_products\_will\_display\_%')
-		   55 Query	UPDATE `wp_posts` SET `post_author` = 1, `post_date` = '2017-06-02 09:59:10', `post_date_gmt` = '2017-06-02 06:59:10', `post_content` = 'test desc', `post_content_filtered` = '', `post_title` = 'test', `post_excerpt` = '', `post_status` = 'publish', `post_type` = 'product', `comment_status` = 'open', `ping_status` = 'closed', `post_password` = '', `post_name` = 'test', `to_ping` = '', `pinged` = '', `post_modified` = '2017-06-02 09:59:10', `post_modified_gmt` = '2017-06-02 06:59:10', `post_parent` = 0, `menu_order` = 0, `post_mime_type` = '', `guid` = 'http://10.0.3.94/?post_type=product&#038;p=45' WHERE `ID` = 45
-
-		   55 Query	DELETE FROM wp_options WHERE option_name LIKE '\\_transient\\_%1496386750' ORDER BY option_id LIMIT 1000
-		   55 Query	DELETE FROM `wp_options`
-				WHERE `option_name` LIKE ('\_transient\_wc\_uf\_pid\_%')
-				OR `option_name` LIKE ('\_transient\_timeout\_wc\_uf\_pid\_%')
-				OR `option_name` LIKE ('\_transient\_wc\_products\_will\_display\_%')
-				OR `option_name` LIKE ('\_transient\_timeout\_wc\_products\_will\_display\_%')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, 'total_sales', '0')
-
-		   55 Query	INSERT INTO `wp_term_relationships` (`object_id`, `term_taxonomy_id`) VALUES (45, 2)
-
-		   55 Query	UPDATE `wp_term_taxonomy` SET `count` = 1 WHERE `term_taxonomy_id` = 2
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_downloadable', 'no')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_virtual', 'no')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_purchase_note', '')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_featured', 'no')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_weight', '1')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_length', '2')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_width', '3')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_height', '4')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_sku', 'article')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_regular_price', '100')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_sale_price', '50')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_sale_price_dates_from', '')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_sale_price_dates_to', '')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_price', '50')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_sold_individually', '')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_manage_stock', 'no')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_backorders', 'no')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_stock', '')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_upsell_ids', 'a:0:{}')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_crosssell_ids', 'a:0:{}')
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_product_version', '2.5.5')
-
-		   55 Query	DELETE FROM `wp_options` WHERE `option_name` = '_transient_wc_outofstock_count'
-
-		   55 Query	DELETE FROM `wp_options` WHERE `option_name` = '_transient_timeout_wc_outofstock_count'
-
-		   55 Query	DELETE FROM `wp_options` WHERE `option_name` = '_transient_wc_low_stock_count'
-
-		   55 Query	DELETE FROM `wp_options` WHERE `option_name` = '_transient_timeout_wc_low_stock_count'
-
-		   55 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_product-transient-version', '1496386751', 'yes') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   55 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_product_image_gallery', '')
-
-		   55 Query	UPDATE `wp_postmeta` SET `meta_value` = '1496386751:1' WHERE `post_id` = 45 AND `meta_key` = '_edit_lock'
-
-		   59 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991554', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   59 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-170602  6:59:15	   59 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   61 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991614', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   61 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-170602  7:00:15	   61 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   63 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991734', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   63 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   65 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991755', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-170602  7:02:36	   65 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   65 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   65 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_is_multi_author', '0', 'yes') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   65 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('product_cat_children', 'a:0:{}', 'yes') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   65 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('product_shipping_class_children', 'a:0:{}', 'yes') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   65 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_wc_rating_count', 'a:0:{}')
-
-		   65 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_wc_review_count', '0')
-
-		   65 Query	INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_wc_average_rating', '0')
-
-		   65 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_wc_related_45', '1496473356', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   65 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_wc_related_45', 'a:0:{}', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   67 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991758', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   67 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-170602  7:02:39	   67 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   69 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991761', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   69 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   69 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   69 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_wc_uf_pid_82a228889bf709ba717a5af2b3fc7564', '1498978961', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   69 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_wc_uf_pid_82a228889bf709ba717a5af2b3fc7564', 'a:1:{i:0;i:45;}', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   73 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991770', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   73 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   73 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   73 Query	UPDATE `wp_postmeta` SET `meta_value` = '1496386825:1' WHERE `post_id` = 45 AND `meta_key` = '_edit_lock' AND `meta_value` = '1496386751:1'
-
-		   75 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991803', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   75 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-170602  7:03:24	   75 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   75 Query	INSERT INTO `wp_terms` (`name`, `slug`, `term_group`) VALUES ('Категирия', 'cat1', 0)
-
-		   75 Query	INSERT INTO `wp_term_taxonomy` (`term_id`, `taxonomy`, `description`, `parent`, `count`) VALUES (8, 'product_cat', 'dfg df gdf gdf gdf gd fgdf gdf gdfg dfg dfg ', 0, 0)
-
-		   75 Query	INSERT INTO `wp_woocommerce_termmeta` (`woocommerce_term_id`, `meta_key`, `meta_value`) VALUES ('8', 'order', '0')
-
-		   75 Query	DELETE FROM `wp_options` WHERE `option_name` = 'product_cat_children'
-
-		   75 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('product_cat_children', 'a:0:{}', 'yes') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-		   75 Query	INSERT INTO `wp_woocommerce_termmeta` (`woocommerce_term_id`, `meta_key`, `meta_value`) VALUES ('8', 'display_type', '')
-
-		   75 Query	INSERT INTO `wp_woocommerce_termmeta` (`woocommerce_term_id`, `meta_key`, `meta_value`) VALUES ('8', 'thumbnail_id', '0')
-
-		   79 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_timeout_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '1496991816', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-		   79 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-170602  7:03:37	   79 Query	INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('_transient_geoip_503 Over Quota Error &nbsp; Over Quota This application is temporarily over its serving quota. Please try again later.', '', 'no') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
-
-
-		   81 Query	UPDATE `wp_postmeta` SET `meta_value` = '1496387022:1' WHERE `post_id` = 45 AND `meta_key` = '_edit_lock'
-
-
-		   83 Query	UPDATE `wp_postmeta` SET `meta_key` = 'total_sales', `meta_value` = '0' WHERE `meta_id` = 206
-
-		   83 Query	UPDATE `wp_postmeta` SET `meta_value` = '1' WHERE `post_id` = 45 AND `meta_key` = '_edit_last'
-
-		   83 Query	UPDATE `wp_posts` SET `post_author` = 1, `post_date` = '2017-06-02 09:59:10', `post_date_gmt` = '2017-06-02 06:59:10', `post_content` = 'test desc', `post_content_filtered` = '', `post_title` = 'test', `post_excerpt` = '', `post_status` = 'publish', `post_type` = 'product', `comment_status` = 'open', `ping_status` = 'closed', `post_password` = '', `post_name` = 'test', `to_ping` = '', `pinged` = '', `post_modified` = '2017-06-02 10:03:51', `post_modified_gmt` = '2017-06-02 07:03:51', `post_parent` = 0, `menu_order` = 0, `post_mime_type` = '', `guid` = 'http://10.0.3.94/?post_type=product&#038;p=45' WHERE `ID` = 45
-
-		   83 Query	INSERT INTO `wp_term_relationships` (`object_id`, `term_taxonomy_id`) VALUES (45, 8)
-
-		   83 Query	UPDATE `wp_term_taxonomy` SET `count` = 1 WHERE `term_taxonomy_id` = 8
-
-		   83 Query	INSERT INTO `wp_woocommerce_termmeta` (`woocommerce_term_id`, `meta_key`, `meta_value`) VALUES ('8', 'product_count_product_cat', '1')
-
-		   83 Query	UPDATE `wp_term_taxonomy` SET `count` = 1 WHERE `term_taxonomy_id` = 2
-
-		   83 Query	UPDATE `wp_term_taxonomy` SET `count` = 1 WHERE `term_taxonomy_id` = 8
-
-		   83 Query	UPDATE `wp_woocommerce_termmeta` SET `meta_value` = '1' WHERE `woocommerce_term_id` = '8' AND `meta_key` = 'product_count_product_cat'
-
-		   83 Query	DELETE FROM `wp_options` WHERE `option_name` = '_transient_is_multi_author'
-
-		   83 Query	DELETE FROM wp_options WHERE option_name LIKE '\\_transient\\_%1496386750' ORDER BY option_id LIMIT 1000
-		   83 Query	UPDATE `wp_options` SET `option_value` = '1496387031' WHERE `option_name` = '_transient_product_query-transient-version'
-		   83 Query	DELETE FROM `wp_options`
-				WHERE `option_name` LIKE ('\_transient\_wc\_uf\_pid\_%')
-				OR `option_name` LIKE ('\_transient\_timeout\_wc\_uf\_pid\_%')
-				OR `option_name` LIKE ('\_transient\_wc\_products\_will\_display\_%')
-				OR `option_name` LIKE ('\_transient\_timeout\_wc\_products\_will\_display\_%')
-
-		   83 Query	DELETE FROM `wp_options` WHERE `option_name` = '_transient_wc_related_45'
-
-		   83 Query	DELETE FROM `wp_options` WHERE `option_name` = '_transient_timeout_wc_related_45'
-		   83 Query	DELETE FROM wp_options WHERE option_name LIKE '\\_transient\\_%1496386751' ORDER BY option_id LIMIT 1000
-		   83 Query	UPDATE `wp_options` SET `option_value` = '1496387032' WHERE `option_name` = '_transient_product-transient-version'
-
-		   83 Query	UPDATE `wp_postmeta` SET `meta_value` = '1496387032:1' WHERE `post_id` = 45 AND `meta_key` = '_edit_lock'
-
-		   89 Query	UPDATE `wp_postmeta` SET `meta_value` = '1496386949:1' WHERE `post_id` = 45 AND `meta_key` = '_edit_lock' AND `meta_value` = '1496387032:1'
+UPDATE `wp_posts` SET `post_author` = 1, `post_date` = '2017-06-02 09:56:17', `post_date_gmt` = '0000-00-00 00:00:00', `post_content` = '', `post_content_filtered` = '', `post_title` = 'test', `post_excerpt` = '', `post_status` = 'draft', `post_type` = 'product', `comment_status` = 'open', `ping_status` = 'closed', `post_password` = '', `post_name` = '', `to_ping` = '', `pinged` = '', `post_modified` = '2017-06-02 09:56:17', `post_modified_gmt` = '2017-06-02 06:56:17', `post_parent` = 0, `menu_order` = 0, `post_mime_type` = '', `guid` = 'http://10.0.3.94/?post_type=product&#038;p=45' WHERE `ID` = 45
+UPDATE `wp_posts` SET `post_author` = 1, `post_date` = '2017-06-02 09:58:16', `post_date_gmt` = '0000-00-00 00:00:00', `post_content` = 'test desc', `post_content_filtered` = '', `post_title` = 'test', `post_excerpt` = '', `post_status` = 'draft', `post_type` = 'product', `comment_status` = 'open', `ping_status` = 'closed', `post_password` = '', `post_name` = '', `to_ping` = '', `pinged` = '', `post_modified` = '2017-06-02 09:58:16', `post_modified_gmt` = '2017-06-02 06:58:16', `post_parent` = 0, `menu_order` = 0, `post_mime_type` = '', `guid` = 'http://10.0.3.94/?post_type=product&#038;p=45' WHERE `ID` = 45
+UPDATE `wp_options` SET `option_value` = '1496386750' WHERE `option_name` = '_transient_product_query-transient-version'
+UPDATE `wp_posts` SET `post_author` = 1, `post_date` = '2017-06-02 09:59:10', `post_date_gmt` = '2017-06-02 06:59:10', `post_content` = 'test desc', `post_content_filtered` = '', `post_title` = 'test', `post_excerpt` = '', `post_status` = 'publish', `post_type` = 'product', `comment_status` = 'open', `ping_status` = 'closed', `post_password` = '', `post_name` = 'test', `to_ping` = '', `pinged` = '', `post_modified` = '2017-06-02 09:59:10', `post_modified_gmt` = '2017-06-02 06:59:10', `post_parent` = 0, `menu_order` = 0, `post_mime_type` = '', `guid` = 'http://10.0.3.94/?post_type=product&#038;p=45' WHERE `ID` = 45
+INSERT INTO `wp_term_relationships` (`object_id`, `term_taxonomy_id`) VALUES (45, 2)
+UPDATE `wp_term_taxonomy` SET `count` = 1 WHERE `term_taxonomy_id` = 2
+
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_product_attributes', 'a:1:{s:12:\"attr-product\";a:6:{s:4:\"name\";s:12:\"Attr product\";s:5:\"value\";s:10:\"attr value\";s:8:\"position\";s:1:\"0\";s:10:\"is_visible\";i:1;s:12:\"is_variation\";i:0;s:11:\"is_taxonomy\";i:0;}}')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_visibility', 'visible')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_stock_status', 'instock')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, 'total_sales', '0')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_downloadable', 'no')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_virtual', 'no')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_purchase_note', '')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_featured', 'no')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_weight', '1')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_length', '2')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_width', '3')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_height', '4')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_sku', 'article')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_regular_price', '100')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_sale_price', '50')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_sale_price_dates_from', '')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_sale_price_dates_to', '')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_price', '50')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_sold_individually', '')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_manage_stock', 'no')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_backorders', 'no')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_stock', '')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_upsell_ids', 'a:0:{}')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_crosssell_ids', 'a:0:{}')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_product_version', '2.5.5')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_product_image_gallery', '')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_wc_rating_count', 'a:0:{}')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_wc_review_count', '0')
+INSERT INTO `wp_postmeta` (`post_id`, `meta_key`, `meta_value`) VALUES (45, '_wc_average_rating', '0')
+
+INSERT INTO `wp_terms` (`name`, `slug`, `term_group`) VALUES ('Категирия', 'cat1', 0)
+
+INSERT INTO `wp_term_taxonomy` (`term_id`, `taxonomy`, `description`, `parent`, `count`) VALUES (8, 'product_cat', 'dfg df gdf gdf gdf gd fgdf gdf gdfg dfg dfg ', 0, 0)
+
+INSERT INTO `wp_woocommerce_termmeta` (`woocommerce_term_id`, `meta_key`, `meta_value`) VALUES ('8', 'order', '0')
+INSERT INTO `wp_woocommerce_termmeta` (`woocommerce_term_id`, `meta_key`, `meta_value`) VALUES ('8', 'display_type', '')
+INSERT INTO `wp_woocommerce_termmeta` (`woocommerce_term_id`, `meta_key`, `meta_value`) VALUES ('8', 'thumbnail_id', '0')
+
+INSERT INTO `wp_options` (`option_name`, `option_value`, `autoload`) VALUES ('product_cat_children', 'a:0:{}', 'yes') ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)
+UPDATE `wp_postmeta` SET `meta_key` = 'total_sales', `meta_value` = '0' WHERE `meta_id` = 206
+UPDATE `wp_posts` SET `post_author` = 1, `post_date` = '2017-06-02 09:59:10', `post_date_gmt` = '2017-06-02 06:59:10', `post_content` = 'test desc', `post_content_filtered` = '', `post_title` = 'test', `post_excerpt` = '', `post_status` = 'publish', `post_type` = 'product', `comment_status` = 'open', `ping_status` = 'closed', `post_password` = '', `post_name` = 'test', `to_ping` = '', `pinged` = '', `post_modified` = '2017-06-02 10:03:51', `post_modified_gmt` = '2017-06-02 07:03:51', `post_parent` = 0, `menu_order` = 0, `post_mime_type` = '', `guid` = 'http://10.0.3.94/?post_type=product&#038;p=45' WHERE `ID` = 45
+INSERT INTO `wp_term_relationships` (`object_id`, `term_taxonomy_id`) VALUES (45, 8)
+UPDATE `wp_term_taxonomy` SET `count` = 1 WHERE `term_taxonomy_id` = 8
+INSERT INTO `wp_woocommerce_termmeta` (`woocommerce_term_id`, `meta_key`, `meta_value`) VALUES ('8', 'product_count_product_cat', '1')
+UPDATE `wp_term_taxonomy` SET `count` = 1 WHERE `term_taxonomy_id` = 2
+UPDATE `wp_term_taxonomy` SET `count` = 1 WHERE `term_taxonomy_id` = 8
+UPDATE `wp_woocommerce_termmeta` SET `meta_value` = '1' WHERE `woocommerce_term_id` = '8' AND `meta_key` = 'product_count_product_cat'
