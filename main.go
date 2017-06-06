@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/gosimple/slug"
-	squirrel "gopkg.in/Masterminds/squirrel.v1"
-	"github.com/imega-teleport/db2file/mysql"
 	"github.com/imega-teleport/db2file/exporter"
+	"github.com/imega-teleport/db2file/mysql"
 )
 
 type Term struct {
@@ -54,20 +54,8 @@ func main() {
 	}()
 
 	storage := mysql.NewStorage(db)
-	exporter := exporter.NewExporter(storage)
-
-	t := Term{
-		ID:   1,
-		Name: "name",
-		Slug: "Имя Фамилия",
-	}
-
-	builder := squirrel.Insert("terms")
-	builder = builder.Columns("term_id", "name", "slug")
-	builder = builder.Values(squirrel.Expr(t.ID.String()), t.Name, t.Slug)
-
-	query := squirrel.DebugSqlizer(builder)
-	fmt.Println(query)
+	woo := exporter.NewExporter(storage)
+	woo.Export()
 }
 
 func check(e error) {
