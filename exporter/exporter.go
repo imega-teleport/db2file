@@ -5,8 +5,8 @@ import (
 
 	"github.com/gosimple/slug"
 	"github.com/imega-teleport/db2file/storage"
-	"gopkg.in/Masterminds/squirrel.v1"
 	"github.com/imega-teleport/xml2db/commerceml"
+	"gopkg.in/Masterminds/squirrel.v1"
 )
 
 type woocommece struct {
@@ -62,9 +62,9 @@ func Terms(startID *int, parentID int, groups []commerceml.Group) []Term {
 	for _, i := range groups {
 		*startID++
 		t := Term{
-			ID:   ID(*startID),
-			Name: i.Name,
-			Slug: Slug(i.Name),
+			ID:    ID(*startID),
+			Name:  i.Name,
+			Slug:  Slug(i.Name),
 			Group: ID(parentID),
 		}
 		terms = append(terms, t)
