@@ -3,7 +3,7 @@ package exporter
 import (
 	"fmt"
 
-	"github.com/gosimple/slug"
+	slugmaker "github.com/gosimple/slug"
 	"github.com/imega-teleport/db2file/storage"
 	"github.com/imega-teleport/xml2db/commerceml"
 	"gopkg.in/Masterminds/squirrel.v1"
@@ -13,7 +13,7 @@ type woocommece struct {
 	storage storage.Store
 }
 
-// NewExporter return new exporter instance
+// NewExporter return woocommece instance
 func NewExporter(storage storage.Store) *woocommece {
 	return &woocommece{
 		storage: storage,
@@ -23,14 +23,14 @@ func NewExporter(storage storage.Store) *woocommece {
 type term struct {
 	ID    ID
 	Name  string
-	Slug  Slug
+	Slug  slug
 	Group ID
 }
 
-type Slug string
+type slug string
 
-func (s Slug) String() string {
-	return slug.Make(string(s))
+func (s slug) String() string {
+	return slugmaker.Make(string(s))
 }
 
 type ID int
@@ -65,7 +65,7 @@ func Terms(startID *int, parentID int, groups []commerceml.Group) []term {
 		t := term{
 			ID:    ID(*startID),
 			Name:  i.Name,
-			Slug:  Slug(i.Name),
+			Slug:  slug(i.Name),
 			Group: ID(parentID),
 		}
 		terms = append(terms, t)
