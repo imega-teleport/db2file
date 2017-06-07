@@ -13,13 +13,14 @@ type woocommece struct {
 	storage storage.Store
 }
 
+// Get new exporter
 func NewExporter(storage storage.Store) *woocommece {
 	return &woocommece{
 		storage: storage,
 	}
 }
 
-type Term struct {
+type term struct {
 	ID    ID
 	Name  string
 	Slug  Slug
@@ -57,11 +58,11 @@ func (w *woocommece) Export() (err error) {
 	return
 }
 
-func Terms(startID *int, parentID int, groups []commerceml.Group) []Term {
-	var terms []Term
+func Terms(startID *int, parentID int, groups []commerceml.Group) []term {
+	var terms []term
 	for _, i := range groups {
 		*startID++
-		t := Term{
+		t := term{
 			ID:    ID(*startID),
 			Name:  i.Name,
 			Slug:  Slug(i.Name),
@@ -80,7 +81,7 @@ type builder struct {
 	squirrel.InsertBuilder
 }
 
-func (b *builder) Terms(terms []Term) {
+func (b *builder) Terms(terms []term) {
 	for _, i := range terms {
 		*b = builder{
 			b.Values(squirrel.Expr(i.ID.String()), i.Name, i.Slug, squirrel.Expr(i.Group.String())),

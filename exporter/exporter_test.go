@@ -26,14 +26,14 @@ func TestTerms_WithGroupLevel1_ReturnTerm(t *testing.T) {
 	var id = 0
 	terms := Terms(&id, 0, groups)
 
-	assert.Equal(t, []Term{
-		Term{
+	assert.Equal(t, []term{
+		term{
 			ID:    1,
 			Name:  "name1",
 			Slug:  "name1",
 			Group: 0,
 		},
-		Term{
+		term{
 			ID:    2,
 			Name:  "name2",
 			Slug:  "name2",
@@ -52,13 +52,13 @@ func TestTerms_WithGroupLevel2_ReturnTerm(t *testing.T) {
 			Groups: []commerceml.Group{
 				commerceml.Group{
 					IdName: commerceml.IdName{
-						Id: "id1-1",
+						Id:   "id1-1",
 						Name: "name1-1",
 					},
 				},
 				commerceml.Group{
 					IdName: commerceml.IdName{
-						Id: "id1-2",
+						Id:   "id1-2",
 						Name: "name1-2",
 					},
 				},
@@ -72,7 +72,7 @@ func TestTerms_WithGroupLevel2_ReturnTerm(t *testing.T) {
 			Groups: []commerceml.Group{
 				commerceml.Group{
 					IdName: commerceml.IdName{
-						Id: "id2-1",
+						Id:   "id2-1",
 						Name: "name2-1",
 					},
 				},
@@ -83,32 +83,32 @@ func TestTerms_WithGroupLevel2_ReturnTerm(t *testing.T) {
 	var id = 0
 	terms := Terms(&id, 0, groups)
 
-	assert.Equal(t, []Term{
-		Term{
+	assert.Equal(t, []term{
+		term{
 			ID:    1,
 			Name:  "name1",
 			Slug:  "name1",
 			Group: 0,
 		},
-		Term{
+		term{
 			ID:    2,
 			Name:  "name1-1",
 			Slug:  "name1-1",
 			Group: 1,
 		},
-		Term{
+		term{
 			ID:    3,
 			Name:  "name1-2",
 			Slug:  "name1-2",
 			Group: 1,
 		},
-		Term{
+		term{
 			ID:    4,
 			Name:  "name2",
 			Slug:  "name2",
 			Group: 0,
 		},
-		Term{
+		term{
 			ID:    5,
 			Name:  "name2-1",
 			Slug:  "name2-1",
@@ -127,19 +127,19 @@ func TestTerms_WithGroupLevel3_ReturnTerm(t *testing.T) {
 			Groups: []commerceml.Group{
 				commerceml.Group{
 					IdName: commerceml.IdName{
-						Id: "id1-1",
+						Id:   "id1-1",
 						Name: "name1-1",
 					},
 					Groups: []commerceml.Group{
 						commerceml.Group{
 							IdName: commerceml.IdName{
-								Id: "id1-1-1",
+								Id:   "id1-1-1",
 								Name: "name1-1-1",
 							},
 						},
 						commerceml.Group{
 							IdName: commerceml.IdName{
-								Id: "id1-1-2",
+								Id:   "id1-1-2",
 								Name: "name1-1-2",
 							},
 						},
@@ -147,13 +147,13 @@ func TestTerms_WithGroupLevel3_ReturnTerm(t *testing.T) {
 				},
 				commerceml.Group{
 					IdName: commerceml.IdName{
-						Id: "id1-2",
+						Id:   "id1-2",
 						Name: "name1-2",
 					},
 					Groups: []commerceml.Group{
 						commerceml.Group{
 							IdName: commerceml.IdName{
-								Id: "id1-2-1",
+								Id:   "id1-2-1",
 								Name: "name1-2-1",
 							},
 						},
@@ -169,7 +169,7 @@ func TestTerms_WithGroupLevel3_ReturnTerm(t *testing.T) {
 			Groups: []commerceml.Group{
 				commerceml.Group{
 					IdName: commerceml.IdName{
-						Id: "id2-1",
+						Id:   "id2-1",
 						Name: "name2-1",
 					},
 				},
@@ -180,50 +180,50 @@ func TestTerms_WithGroupLevel3_ReturnTerm(t *testing.T) {
 	var id = 0
 	terms := Terms(&id, 0, groups)
 
-	assert.Equal(t, []Term{
-		Term{
+	assert.Equal(t, []term{
+		term{
 			ID:    1,
 			Name:  "name1",
 			Slug:  "name1",
 			Group: 0,
 		},
-		Term{
+		term{
 			ID:    2,
 			Name:  "name1-1",
 			Slug:  "name1-1",
 			Group: 1,
 		},
-		Term{
+		term{
 			ID:    3,
 			Name:  "name1-1-1",
 			Slug:  "name1-1-1",
 			Group: 2,
 		},
-		Term{
+		term{
 			ID:    4,
 			Name:  "name1-1-2",
 			Slug:  "name1-1-2",
 			Group: 2,
 		},
-		Term{
+		term{
 			ID:    5,
 			Name:  "name1-2",
 			Slug:  "name1-2",
 			Group: 1,
 		},
-		Term{
+		term{
 			ID:    6,
 			Name:  "name1-2-1",
 			Slug:  "name1-2-1",
 			Group: 5,
 		},
-		Term{
+		term{
 			ID:    7,
 			Name:  "name2",
 			Slug:  "name2",
 			Group: 0,
 		},
-		Term{
+		term{
 			ID:    8,
 			Name:  "name2-1",
 			Slug:  "name2-1",
