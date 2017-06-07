@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTerms_WithGroupLevel1_ReturnTerm(t *testing.T) {
+func Test_Terms_WithGroupLevel1_ReturnTerm(t *testing.T) {
 	groups := []commerceml.Group{
 		commerceml.Group{
 			IdName: commerceml.IdName{
@@ -23,8 +23,8 @@ func TestTerms_WithGroupLevel1_ReturnTerm(t *testing.T) {
 		},
 	}
 
-	var id = 0
-	terms := Terms(&id, 0, groups)
+	var startTermID, startTaxonomyID int
+	terms, _ := Terms(&startTermID, &startTaxonomyID, 0, groups)
 
 	assert.Equal(t, []term{
 		term{
@@ -42,7 +42,7 @@ func TestTerms_WithGroupLevel1_ReturnTerm(t *testing.T) {
 	}, terms)
 }
 
-func TestTerms_WithGroupLevel2_ReturnTerm(t *testing.T) {
+func Test_Terms_WithGroupLevel2_ReturnTerm(t *testing.T) {
 	groups := []commerceml.Group{
 		commerceml.Group{
 			IdName: commerceml.IdName{
@@ -80,8 +80,8 @@ func TestTerms_WithGroupLevel2_ReturnTerm(t *testing.T) {
 		},
 	}
 
-	var id = 0
-	terms := Terms(&id, 0, groups)
+	var startTermID, startTaxonomyID int
+	terms, _ := Terms(&startTermID, &startTaxonomyID, 0, groups)
 
 	assert.Equal(t, []term{
 		term{
@@ -117,7 +117,7 @@ func TestTerms_WithGroupLevel2_ReturnTerm(t *testing.T) {
 	}, terms)
 }
 
-func TestTerms_WithGroupLevel3_ReturnTerm(t *testing.T) {
+func Test_Terms_WithGroupLevel3_ReturnTerm(t *testing.T) {
 	groups := []commerceml.Group{
 		commerceml.Group{
 			IdName: commerceml.IdName{
@@ -177,8 +177,8 @@ func TestTerms_WithGroupLevel3_ReturnTerm(t *testing.T) {
 		},
 	}
 
-	var id = 0
-	terms := Terms(&id, 0, groups)
+	var startTermID, startTaxonomyID int
+	terms, _ := Terms(&startTermID, &startTaxonomyID, 0, groups)
 
 	assert.Equal(t, []term{
 		term{
@@ -230,4 +230,43 @@ func TestTerms_WithGroupLevel3_ReturnTerm(t *testing.T) {
 			Group: 7,
 		},
 	}, terms)
+}
+
+func Test_TermsTaxonomy_WithGroupLevel1_ReturnTermTaxonomy(t *testing.T) {
+	groups := []commerceml.Group{
+		commerceml.Group{
+			IdName: commerceml.IdName{
+				Id:   "id1",
+				Name: "name1",
+			},
+		},
+		commerceml.Group{
+			IdName: commerceml.IdName{
+				Id:   "id2",
+				Name: "name2",
+			},
+		},
+	}
+
+	var startTermID, startTaxonomyID int
+	_, termsTaxonomy := Terms(&startTermID, &startTaxonomyID, 0, groups)
+
+	assert.Equal(t, []termTaxonomy{
+		termTaxonomy{
+			ID:          1,
+			TermID:      1,
+			Taxonomy:    "product_cat",
+			Description: "name1",
+			Parent:      1,
+			Count:       0,
+		},
+		termTaxonomy{
+			ID:          2,
+			TermID:      2,
+			Taxonomy:    "product_cat",
+			Description: "name2",
+			Parent:      2,
+			Count:       0,
+		},
+	}, termsTaxonomy)
 }
