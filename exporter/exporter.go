@@ -45,16 +45,7 @@ func (w *woocommece) Export() (err error) {
 		return err
 	}
 	var id = 0
-	var terms []Term
-	for _, i := range groups {
-		id++
-		t := Term{
-			ID:   ID(id),
-			Name: i.Name,
-			Slug: Slug(i.Name),
-		}
-		terms = append(terms, t)
-	}
+	terms := Terms(&id, 0, groups)
 
 	b := builder{
 		squirrel.Insert("terms").Columns("term_id", "name", "slug", "parent"),
@@ -66,23 +57,23 @@ func (w *woocommece) Export() (err error) {
 	return
 }
 
-func Terms(startID int, parentID int, groups []commerceml.Group) ([]Term, int) {
+func Terms(startID *int, parentID int, groups []commerceml.Group) []Term {
 	var terms []Term
 	for _, i := range groups {
-		startID++
+		*startID++
 		t := Term{
-			ID:   ID(startID),
+			ID:   ID(*startID),
 			Name: i.Name,
 			Slug: Slug(i.Name),
 			Group: ID(parentID),
 		}
 		terms = append(terms, t)
 		if len(i.Groups) > 0 {
-			childs, _ := Terms(parentID, startID, i.Groups)
-			
+			childs := Terms(startID, *startID, i.Groups)
+			terms = append(terms, childs...)
 		}
 	}
-	return terms, 0
+	return terms
 }
 
 type builder struct {
@@ -92,7 +83,7 @@ type builder struct {
 func (b *builder) Terms(terms []Term) {
 	for _, i := range terms {
 		*b = builder{
-			b.Values(squirrel.Expr(i.ID.String()), i.Name, i.Slug, i.Group),
+			b.Values(squirrel.Expr(i.ID.String()), i.Name, i.Slug, squirrel.Expr(i.Group.String())),
 		}
 	}
 }
