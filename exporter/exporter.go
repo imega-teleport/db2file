@@ -13,7 +13,7 @@ type woocommece struct {
 	storage storage.Store
 }
 
-// Get new exporter
+// NewExporter return new exporter instance
 func NewExporter(storage storage.Store) *woocommece {
 	return &woocommece{
 		storage: storage,
