@@ -11,12 +11,14 @@ import (
 
 type woocommece struct {
 	storage storage.Store
+	prefix  string
 }
 
 // NewExporter return woocommece instance
-func NewExporter(storage storage.Store) *woocommece {
+func NewExporter(storage storage.Store, prefix string) *woocommece {
 	return &woocommece{
 		storage: storage,
+		prefix:  prefix,
 	}
 }
 
@@ -60,54 +62,51 @@ func (w *woocommece) Export() (err error) {
 	if err != nil {
 		return err
 	}
-	var startTermID = 0
-	var startTaxonomyID = 0
-	terms, termsTaxonomy := Terms(&startTermID, &startTaxonomyID, 0, groups)
+	var startTermID, startTaxonomyID = 1, 0
+	terms, termsTaxonomy := Terms(&startTermID, startTaxonomyID, groups)
 
-	b := builder{
-		squirrel.Insert("terms").Columns("term_id", "name", "slug", "parent"),
-	}
-
+	b := w.builderTerm()
 	b.Terms(terms)
 	fmt.Println(squirrel.DebugSqlizer(b))
 
-	btt := builderTermTaxonomy("")
+	btt := w.builderTermTaxonomy()
 	btt.TermsTaxonomy(0, termsTaxonomy)
 	fmt.Println(squirrel.DebugSqlizer(btt))
 
 	return
 }
 
-func Terms(startTermID *int, startTaxonomyID *int, parentID int, groups []commerceml.Group) ([]term, []termTaxonomy) {
+func Terms(startTermID *int, startTaxonomyID int, groups []commerceml.Group) ([]term, []termTaxonomy) {
 	var terms []term
 	var termsTaxonomy []termTaxonomy
 	for _, i := range groups {
-		*startTermID++
-		*startTaxonomyID++
+		parentTaxonomyID := startTaxonomyID
+		if startTaxonomyID == 0 {
+			parentTaxonomyID = *startTermID
+		}
+
 		t := term{
-			ID:    termID(*startTermID),
-			Name:  i.Name,
-			Slug:  slug(i.Name),
-			Group: termID(parentID),
+			ID:   termID(*startTermID),
+			Name: i.Name,
+			Slug: slug(i.Name),
 		}
 		terms = append(terms, t)
-		termTaxonomyParent := startTermID
-		if *startTaxonomyID > 0 {
-			termTaxonomyParent = startTaxonomyID
-		}
+
 		tt := termTaxonomy{
-			ID: taxonomyID(*startTaxonomyID),
-			TermID: termID(*startTermID),
-			Taxonomy: "product_cat",
+			ID:          taxonomyID(*startTermID),
+			TermID:      termID(*startTermID),
+			Taxonomy:    "product_cat",
 			Description: i.Name, //group.description
-			Parent: taxonomyID(*termTaxonomyParent),
+			Parent:      taxonomyID(parentTaxonomyID),
 		}
 		termsTaxonomy = append(termsTaxonomy, tt)
+		*startTermID++
 		if len(i.Groups) > 0 {
-			childsTerms, childsTermsTaxonomy := Terms(startTermID, startTaxonomyID, *startTermID, i.Groups)
+			childsTerms, childsTermsTaxonomy := Terms(startTermID, parentTaxonomyID, i.Groups)
 			terms = append(terms, childsTerms...)
 			termsTaxonomy = append(termsTaxonomy, childsTermsTaxonomy...)
 		}
+
 	}
 	return terms, termsTaxonomy
 }
@@ -132,8 +131,14 @@ func (b *builder) TermsTaxonomy(taxonomyID int, t []termTaxonomy) {
 	}
 }
 
-func builderTermTaxonomy(prefix string) builder {
+func (w *woocommece) builderTerm() builder {
 	return builder{
-		squirrel.Insert(prefix + "term_taxonomy").Columns("term_taxonomy_id", "term_id", "taxonomy", "description", "parent", "count"),
+		squirrel.Insert(w.prefix + "terms").Columns("term_id", "name", "slug", "parent"),
+	}
+}
+
+func (w *woocommece) builderTermTaxonomy() builder {
+	return builder{
+		squirrel.Insert(w.prefix + "term_taxonomy").Columns("term_taxonomy_id", "term_id", "taxonomy", "description", "parent", "count"),
 	}
 }

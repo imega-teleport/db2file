@@ -54,7 +54,7 @@ func main() {
 	}()
 
 	storage := mysql.NewStorage(db)
-	woo := exporter.NewExporter(storage)
+	woo := exporter.NewExporter(storage, "")
 	woo.Export()
 }
 
