@@ -2,14 +2,15 @@ package exporter
 
 import (
 	"fmt"
-
 	"io"
+	"time"
 
 	slugmaker "github.com/gosimple/slug"
 	"github.com/imega-teleport/db2file/paginator"
 	"github.com/imega-teleport/db2file/storage"
 	"github.com/imega-teleport/xml2db/commerceml"
 	"gopkg.in/Masterminds/squirrel.v1"
+	"strings"
 )
 
 type woocommece struct {
@@ -24,6 +25,76 @@ func NewExporter(storage storage.Store, prefix string) *woocommece {
 		prefix:  prefix,
 	}
 }
+
+func (w *woocommece) Export(writer *io.PipeWriter) (err error) {
+	groups, err := w.storage.Groups("")
+	if err != nil {
+		return err
+	}
+	var startTermID, startTaxonomyID = 1, 0
+	terms, termsTaxonomy := Terms(&startTermID, startTaxonomyID, groups)
+
+	/*posts, err := w.storage.Posts("")
+	if err != nil {
+		return err
+	}*/
+
+	go func() {
+		writer.Write([]byte("start transaction;\n"))
+
+		for k, v := range variables {
+			key := strings.Replace(slugmaker.Make(k), "-", "", -1)
+			writer.Write([]byte(fmt.Sprintf("set @%s=%d;\n", key, v)))
+		}
+
+		values := make([]interface{}, len(terms))
+		for i, v := range terms {
+			values[i] = v
+		}
+
+		b := w.builderTerm()
+
+		p := paginator.NewPaginator(100000)
+
+		p.Processing(
+			values,
+			func(t interface{}) interface{} {
+				b.AddTerm(t.(term))
+				return false
+			},
+			func(interface{}) interface{} {
+				writer.Write([]byte(fmt.Sprintf("%s;\n", squirrel.DebugSqlizer(b))))
+				b = w.builderTerm()
+				return false
+			},
+		)
+
+		bt := w.builderTermTaxonomy()
+		values1 := make([]interface{}, len(termsTaxonomy))
+		for i, v := range termsTaxonomy {
+			values1[i] = v
+		}
+
+		p.Processing(
+			values1,
+			func(t interface{}) interface{} {
+				bt.AddTermsTaxonomy(t.(termTaxonomy))
+				return false
+			},
+			func(interface{}) interface{} {
+				writer.Write([]byte(fmt.Sprintf("%s;\n", squirrel.DebugSqlizer(bt))))
+				bt = w.builderTermTaxonomy()
+				return false
+			},
+		)
+		writer.Write([]byte("commit;\n"))
+		writer.Close()
+	}()
+
+	return
+}
+
+var variables = make(map[string]int)
 
 type term struct {
 	ID    termID
@@ -59,62 +130,6 @@ func (i taxonomyID) String() string {
 	return fmt.Sprintf("@max_term_taxonomy_id+%d", i)
 }
 
-func (w *woocommece) Export(writer *io.PipeWriter) (err error) {
-	groups, err := w.storage.Groups("")
-	if err != nil {
-		return err
-	}
-	var startTermID, startTaxonomyID = 1, 0
-	terms, termsTaxonomy := Terms(&startTermID, startTaxonomyID, groups)
-
-
-	go func() {
-		values := make([]interface{}, len(terms))
-		for i, v := range terms {
-			values[i] = v
-		}
-
-		b := w.builderTerm()
-
-		p := paginator.NewPaginator(100000)
-
-		p.Processing(
-			values,
-			func(t interface{}) interface{} {
-				b.AddTerm(t.(term))
-				return false
-			},
-			func(interface{}) interface{} {
-				writer.Write([]byte(fmt.Sprintf("%s;", squirrel.DebugSqlizer(b))))
-				b = w.builderTerm()
-				return false
-			},
-		)
-
-		bt := w.builderTermTaxonomy()
-		values1 := make([]interface{}, len(termsTaxonomy))
-		for i, v := range termsTaxonomy {
-			values1[i] = v
-		}
-
-		p.Processing(
-			values1,
-			func(t interface{}) interface{} {
-				bt.AddTermsTaxonomy(t.(termTaxonomy))
-				return false
-			},
-			func(interface{}) interface{} {
-				writer.Write([]byte(fmt.Sprintf("%s;", squirrel.DebugSqlizer(bt))))
-				bt = w.builderTermTaxonomy()
-				return false
-			},
-		)
-		writer.Close()
-	}()
-
-	return
-}
-
 func Terms(startTermID *int, startTaxonomyID int, groups []commerceml.Group) ([]term, []termTaxonomy) {
 	var terms []term
 	var termsTaxonomy []termTaxonomy
@@ -131,6 +146,7 @@ func Terms(startTermID *int, startTaxonomyID int, groups []commerceml.Group) ([]
 		}
 		terms = append(terms, t)
 
+		variables[i.Id] = *startTermID
 		tt := termTaxonomy{
 			ID:          taxonomyID(*startTermID),
 			TermID:      termID(*startTermID),
@@ -150,6 +166,54 @@ func Terms(startTermID *int, startTaxonomyID int, groups []commerceml.Group) ([]
 	return terms, termsTaxonomy
 }
 
+type post struct {
+	ID              postID
+	AuthorID        authorID
+	Date            time.Time
+	Content         string
+	Title           string
+	Excerpt         string
+	Status          string //publish
+	CommentStatus   string //open
+	PingStatus      string //open
+	Password        string
+	Name            string
+	ToPing          string
+	Pinged          string
+	Modified        time.Time
+	ContentFiltered string
+	ParentID        postID
+	GUID            string
+	MenuOrder       int
+	Type            string //post
+	MimeType        string
+	CommentCount    int
+}
+
+type postID int
+
+func (i postID) String() string {
+	return fmt.Sprintf("@max_post_id+%d", i)
+}
+
+type authorID int
+
+func (i authorID) String() string {
+	return "@author_id"
+}
+
+/*func Posts(products []commerceml.Product) []post {
+	var posts []post
+	var startID = 1
+	for _, i := range products {
+		p := post{
+			ID: postID(startID),
+			Content: i.Description.Value,
+		}
+		startID++
+	}
+}*/
+
 type builder struct {
 	squirrel.InsertBuilder
 }
@@ -163,6 +227,35 @@ func (b *builder) AddTerm(t term) {
 func (b *builder) AddTermsTaxonomy(t termTaxonomy) {
 	*b = builder{
 		b.Values(squirrel.Expr(t.ID.String()), squirrel.Expr(t.TermID.String()), t.Taxonomy, t.Description, squirrel.Expr(t.Parent.String()), 0),
+	}
+}
+
+func (b *builder) AddPost(post post) {
+	*b = builder{
+		b.Values(
+			squirrel.Expr(post.ID.String()),
+			post.AuthorID.String(),
+			post.Date.String(),
+			post.Date.UTC().String(),
+			post.Content,
+			post.ContentFiltered,
+			post.Title,
+			post.Excerpt,
+			post.Status,
+			post.Type,
+			post.CommentStatus,
+			post.PingStatus,
+			post.Password,
+			post.Name,
+			post.ToPing,
+			post.Pinged,
+			post.Modified.String(),
+			post.Modified.UTC().String(),
+			squirrel.Expr(post.ParentID.String()),
+			post.MenuOrder,
+			post.MimeType,
+			post.GUID,
+		),
 	}
 }
 
@@ -191,5 +284,33 @@ func (w *woocommece) builderTerm() builder {
 func (w *woocommece) builderTermTaxonomy() builder {
 	return builder{
 		squirrel.Insert(w.prefix + "term_taxonomy").Columns("term_taxonomy_id", "term_id", "taxonomy", "description", "parent", "count"),
+	}
+}
+
+func (w *woocommece) builderPost() builder {
+	return builder{
+		squirrel.Insert(w.prefix + "posts").Columns(
+			"post_author",
+			"post_date",
+			"post_date_gmt",
+			"post_content",
+			"post_content_filtered",
+			"post_title",
+			"post_excerpt",
+			"post_status",
+			"post_type",
+			"comment_status",
+			"ping_status",
+			"post_password",
+			"post_name",
+			"to_ping",
+			"pinged",
+			"post_modified",
+			"post_modified_gmt",
+			"post_parent",
+			"menu_order",
+			"post_mime_type",
+			"guid",
+		),
 	}
 }

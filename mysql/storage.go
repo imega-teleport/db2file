@@ -88,3 +88,7 @@ func (s *storage) groups(parentID string) (groups []group, err error) {
 	}
 	return groups, nil
 }
+
+func (s *storage) Posts(parentID string) (products []commerceml.Product, err error) {
+	return
+}
