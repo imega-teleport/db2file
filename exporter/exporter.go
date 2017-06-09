@@ -3,6 +3,8 @@ package exporter
 import (
 	"fmt"
 	"io"
+	"reflect"
+	"strings"
 	"time"
 
 	slugmaker "github.com/gosimple/slug"
@@ -10,7 +12,6 @@ import (
 	"github.com/imega-teleport/db2file/storage"
 	"github.com/imega-teleport/xml2db/commerceml"
 	"gopkg.in/Masterminds/squirrel.v1"
-	"strings"
 )
 
 type woocommece struct {
@@ -34,10 +35,10 @@ func (w *woocommece) Export(writer *io.PipeWriter) (err error) {
 	var startTermID, startTaxonomyID = 1, 0
 	terms, termsTaxonomy := Terms(&startTermID, startTaxonomyID, groups)
 
-	/*posts, err := w.storage.Posts("")
+	posts, err := w.storage.Posts("")
 	if err != nil {
 		return err
-	}*/
+	}
 
 	go func() {
 		writer.Write([]byte("start transaction;\n"))
@@ -87,6 +88,25 @@ func (w *woocommece) Export(writer *io.PipeWriter) (err error) {
 				return false
 			},
 		)
+
+		bp := w.builderPost()
+		valP := make([]interface{}, len(posts))
+		for i, v := range posts {
+			valP[i] = v
+		}
+		p.Processing(
+			valP,
+			func(p interface{}) interface{} {
+				bp.AddPost(p.(post))
+				return false
+			},
+			func(interface{}) interface{} {
+				writer.Write([]byte(fmt.Sprintf("%s;\n", squirrel.DebugSqlizer(bp))))
+				bp = w.builderPost()
+				return false
+			},
+		)
+
 		writer.Write([]byte("commit;\n"))
 		writer.Close()
 	}()
@@ -202,17 +222,35 @@ func (i authorID) String() string {
 	return "@author_id"
 }
 
-/*func Posts(products []commerceml.Product) []post {
+func Posts(products []commerceml.Product) ([]post, []termRelationship) {
 	var posts []post
+	var rels []termRelationship
 	var startID = 1
 	for _, i := range products {
 		p := post{
-			ID: postID(startID),
+			ID:      postID(startID),
 			Content: i.Description.Value,
 		}
 		startID++
+
+		for _, g := range i.Groups {
+			tr := termRelationship{
+				ObjectType:     &p,
+				ObjectID:       i.Id,
+				TermTaxonomyID: g.Id,
+			}
+			rels = append(rels, tr)
+		}
 	}
-}*/
+	return posts, rels
+}
+
+type termRelationship struct {
+	ObjectType     interface{}
+	ObjectID       string
+	TermTaxonomyID string
+	TermOrder      int
+}
 
 type builder struct {
 	squirrel.InsertBuilder
@@ -255,6 +293,24 @@ func (b *builder) AddPost(post post) {
 			post.MenuOrder,
 			post.MimeType,
 			post.GUID,
+		),
+	}
+}
+
+func (b *builder) AddTermRelationships(r termRelationship) {
+	var prefix string
+	switch reflect.TypeOf(r.ObjectType) {
+	case post{}:
+		prefix = "max_post_id"
+	case term{}:
+		prefix = "max_term_id"
+	}
+
+	*b = builder{
+		b.Values(
+			squirrel.Expr(fmt.Sprintf("@%s+@%s", prefix, r.ObjectID)),
+			squirrel.Expr(fmt.Sprintf("@max_term_id+@%s", r.TermTaxonomyID)),
+			r.TermOrder,
 		),
 	}
 }
@@ -312,5 +368,11 @@ func (w *woocommece) builderPost() builder {
 			"post_mime_type",
 			"guid",
 		),
+	}
+}
+
+func (w *woocommece) builderTermRelationships() builder {
+	return builder{
+		squirrel.Insert(w.prefix + "term_relationships").Columns("object_id", "term_taxonomy_id", "term_order"),
 	}
 }

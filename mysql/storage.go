@@ -90,5 +90,25 @@ func (s *storage) groups(parentID string) (groups []group, err error) {
 }
 
 func (s *storage) Posts(parentID string) (products []commerceml.Product, err error) {
+	rows, err := s.db.Query("select id,parent_id,name from groups where parent_id = ?", parentID)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		item := struct {
+			ID       string
+			ParentID string
+			Name     string
+		}{}
+		err := rows.Scan(&g.ID, &g.ParentID, &g.Name)
+		if err != nil {
+			return nil, err
+		}
+		products = append(products, item)
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
 	return
 }
