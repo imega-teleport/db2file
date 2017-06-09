@@ -3,7 +3,10 @@ package exporter
 import (
 	"fmt"
 
+	"io"
+
 	slugmaker "github.com/gosimple/slug"
+	"github.com/imega-teleport/db2file/paginator"
 	"github.com/imega-teleport/db2file/storage"
 	"github.com/imega-teleport/xml2db/commerceml"
 	"gopkg.in/Masterminds/squirrel.v1"
@@ -56,8 +59,7 @@ func (i taxonomyID) String() string {
 	return fmt.Sprintf("@max_term_taxonomy_id+%d", i)
 }
 
-func (w *woocommece) Export() (err error) {
-	//_, err = writer.Write([]byte("dsf"))
+func (w *woocommece) Export(writer *io.PipeWriter) (err error) {
 	groups, err := w.storage.Groups("")
 	if err != nil {
 		return err
@@ -65,13 +67,50 @@ func (w *woocommece) Export() (err error) {
 	var startTermID, startTaxonomyID = 1, 0
 	terms, termsTaxonomy := Terms(&startTermID, startTaxonomyID, groups)
 
-	b := w.builderTerm()
-	b.Terms(terms)
-	fmt.Println(squirrel.DebugSqlizer(b))
 
-	btt := w.builderTermTaxonomy()
-	btt.TermsTaxonomy(0, termsTaxonomy)
-	fmt.Println(squirrel.DebugSqlizer(btt))
+	go func() {
+		values := make([]interface{}, len(terms))
+		for i, v := range terms {
+			values[i] = v
+		}
+
+		b := w.builderTerm()
+
+		p := paginator.NewPaginator(100000)
+
+		p.Processing(
+			values,
+			func(t interface{}) interface{} {
+				b.AddTerm(t.(term))
+				return false
+			},
+			func(interface{}) interface{} {
+				writer.Write([]byte(fmt.Sprintf("%s;", squirrel.DebugSqlizer(b))))
+				b = w.builderTerm()
+				return false
+			},
+		)
+
+		bt := w.builderTermTaxonomy()
+		values1 := make([]interface{}, len(termsTaxonomy))
+		for i, v := range termsTaxonomy {
+			values1[i] = v
+		}
+
+		p.Processing(
+			values1,
+			func(t interface{}) interface{} {
+				bt.AddTermsTaxonomy(t.(termTaxonomy))
+				return false
+			},
+			func(interface{}) interface{} {
+				writer.Write([]byte(fmt.Sprintf("%s;", squirrel.DebugSqlizer(bt))))
+				bt = w.builderTermTaxonomy()
+				return false
+			},
+		)
+		writer.Close()
+	}()
 
 	return
 }
@@ -113,6 +152,18 @@ func Terms(startTermID *int, startTaxonomyID int, groups []commerceml.Group) ([]
 
 type builder struct {
 	squirrel.InsertBuilder
+}
+
+func (b *builder) AddTerm(t term) {
+	*b = builder{
+		b.Values(squirrel.Expr(t.ID.String()), t.Name, t.Slug, 0),
+	}
+}
+
+func (b *builder) AddTermsTaxonomy(t termTaxonomy) {
+	*b = builder{
+		b.Values(squirrel.Expr(t.ID.String()), squirrel.Expr(t.TermID.String()), t.Taxonomy, t.Description, squirrel.Expr(t.Parent.String()), 0),
+	}
 }
 
 func (b *builder) Terms(terms []term) {

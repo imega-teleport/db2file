@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"os"
 
+	"io"
+	"io/ioutil"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gosimple/slug"
 	"github.com/imega-teleport/db2file/exporter"
@@ -55,7 +58,15 @@ func main() {
 
 	storage := mysql.NewStorage(db)
 	woo := exporter.NewExporter(storage, "")
-	woo.Export()
+	r, w := io.Pipe()
+	defer func() {
+		err = r.Close()
+		err = w.Close()
+	}()
+	woo.Export(w)
+
+	body, _ := ioutil.ReadAll(r)
+	fmt.Printf("%s", body)
 }
 
 func check(e error) {

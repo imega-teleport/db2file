@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"gopkg.in/Masterminds/squirrel.v1"
 )
 
@@ -99,5 +100,9 @@ func Test_Paginator_Processing(t *testing.T) {
 	}()
 	body, _ := ioutil.ReadAll(pr)
 
-	fmt.Printf("%s\n", body)
+	assert.Equal(
+		t,
+		"INSERT INTO term_taxonomy (description) VALUES ('name1'),('name1-1'),('name1-2'),('name2');INSERT INTO term_taxonomy (description) VALUES ('name2-1'),('name2-2');",
+		fmt.Sprintf("%s", body),
+	)
 }
