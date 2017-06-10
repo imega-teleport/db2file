@@ -26,7 +26,7 @@ clean:
 
 
 test: clean db
-	@-docker run --rm \
+	@docker run --rm \
 		-e DB_USER=root \
 		-e DB_PASS=1 \
 		-e DB_HOST="server_db:3306" \
