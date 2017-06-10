@@ -1,0 +1,20 @@
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/go-sql-driver/mysql"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/gosimple/slug"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/imega-teleport/xml2db"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/stretchr/testify"
+
+[[dependencies]]
+  branch = "v1"
+  name = "gopkg.in/Masterminds/squirrel.v1"

@@ -21,7 +21,7 @@ func Test_Paginator_Processing(t *testing.T) {
 	}
 
 	terms := []termTaxonomy{
-		termTaxonomy{
+		{
 			ID:          1,
 			TermID:      1,
 			Taxonomy:    "product_cat",
@@ -29,7 +29,7 @@ func Test_Paginator_Processing(t *testing.T) {
 			Parent:      1,
 			Count:       0,
 		},
-		termTaxonomy{
+		{
 			ID:          2,
 			TermID:      2,
 			Taxonomy:    "product_cat",
@@ -37,7 +37,7 @@ func Test_Paginator_Processing(t *testing.T) {
 			Parent:      1,
 			Count:       0,
 		},
-		termTaxonomy{
+		{
 			ID:          3,
 			TermID:      3,
 			Taxonomy:    "product_cat",
@@ -45,7 +45,7 @@ func Test_Paginator_Processing(t *testing.T) {
 			Parent:      1,
 			Count:       0,
 		},
-		termTaxonomy{
+		{
 			ID:          4,
 			TermID:      4,
 			Taxonomy:    "product_cat",
@@ -53,7 +53,7 @@ func Test_Paginator_Processing(t *testing.T) {
 			Parent:      4,
 			Count:       0,
 		},
-		termTaxonomy{
+		{
 			ID:          5,
 			TermID:      5,
 			Taxonomy:    "product_cat",
@@ -61,7 +61,7 @@ func Test_Paginator_Processing(t *testing.T) {
 			Parent:      4,
 			Count:       0,
 		},
-		termTaxonomy{
+		{
 			ID:          5,
 			TermID:      5,
 			Taxonomy:    "product_cat",

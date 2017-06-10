@@ -333,19 +333,19 @@ func (b *builder) TermsTaxonomy(taxonomyID int, t []termTaxonomy) {
 
 func (w *woocommece) builderTerm() builder {
 	return builder{
-		squirrel.Insert(w.prefix + "terms").Columns("term_id", "name", "slug", "parent"),
+		squirrel.Insert(w.prefix+"terms").Columns("term_id", "name", "slug", "parent"),
 	}
 }
 
 func (w *woocommece) builderTermTaxonomy() builder {
 	return builder{
-		squirrel.Insert(w.prefix + "term_taxonomy").Columns("term_taxonomy_id", "term_id", "taxonomy", "description", "parent", "count"),
+		squirrel.Insert(w.prefix+"term_taxonomy").Columns("term_taxonomy_id", "term_id", "taxonomy", "description", "parent", "count"),
 	}
 }
 
 func (w *woocommece) builderPost() builder {
 	return builder{
-		squirrel.Insert(w.prefix + "posts").Columns(
+		squirrel.Insert(w.prefix+"posts").Columns(
 			"post_author",
 			"post_date",
 			"post_date_gmt",
@@ -373,6 +373,6 @@ func (w *woocommece) builderPost() builder {
 
 func (w *woocommece) builderTermRelationships() builder {
 	return builder{
-		squirrel.Insert(w.prefix + "term_relationships").Columns("object_id", "term_taxonomy_id", "term_order"),
+		squirrel.Insert(w.prefix+"term_relationships").Columns("object_id", "term_taxonomy_id", "term_order"),
 	}
 }

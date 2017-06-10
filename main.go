@@ -1,12 +1,11 @@
-package main
+package main // import "github.com/imega-teleport/db2file"
 
 import (
 	"database/sql"
 	"fmt"
-	"os"
-
 	"io"
 	"io/ioutil"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gosimple/slug"

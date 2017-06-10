@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"database/sql"
+
 	"github.com/imega-teleport/xml2db/commerceml"
 )
 
@@ -35,7 +36,7 @@ func (s *storage) Groups(parentID string) (groups []commerceml.Group, err error)
 		g.Groups = childs
 		groups = append(groups, g)
 	}
-	return groups, err
+	return
 }
 
 type group struct {
@@ -89,7 +90,7 @@ func (s *storage) groups(parentID string) (groups []group, err error) {
 	return groups, nil
 }
 
-func (s *storage) Posts(parentID string) (products []commerceml.Product, err error) {
+/*func (s *storage) Posts(parentID string) (products []commerceml.Product, err error) {
 	rows, err := s.db.Query("select id,parent_id,name from groups where parent_id = ?", parentID)
 	if err != nil {
 		return nil, err
@@ -111,4 +112,4 @@ func (s *storage) Posts(parentID string) (products []commerceml.Product, err err
 		return nil, err
 	}
 	return
-}
+}*/
