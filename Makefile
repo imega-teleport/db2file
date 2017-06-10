@@ -1,6 +1,6 @@
 CWD=/go/src/github.com/imega-teleport/db2file
 
-build: test
+build: dep test
 
 db:
 	@touch $(CURDIR)/mysql.log
