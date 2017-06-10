@@ -88,6 +88,9 @@ func Test_Groups_NotExistsGroup_ReturnsEmptyGroups(t *testing.T) {
 func Test_Groups_WithChildGroup_ReturnsGroups(t *testing.T) {
 	db, teardown := dbUnit.setup(t, "groups", func(db *sql.DB) (err error) {
 		_, err = db.Query("INSERT groups VALUES (?,?,?)", "ecc82696-3f98-11de-991a-001c23888998", "", "Group 1")
+		if err != nil {
+			return
+		}
 		_, err = db.Query("INSERT groups VALUES (?,?,?)", "7077e5f0-f2a5-11de-bc7e-0022b0527b2e", "ecc82696-3f98-11de-991a-001c23888998", "Child Group 1")
 		return
 	})

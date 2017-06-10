@@ -7,7 +7,7 @@ install:
 - go get gopkg.in/alecthomas/gometalinter.v1
 - gometalinter.v1 --install
 before_script:
-- gometalinter.v1 --disable-all --enable=goimports --enable=gofmt ./...
+- gometalinter.v1 --vendor --deadline=300s --disable=gotype --disable=gocyclo ./...
 script:
 - make build
 notifications:

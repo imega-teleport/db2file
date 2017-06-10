@@ -81,8 +81,18 @@ func Test_Paginator_Processing(t *testing.T) {
 	s := squirrel.Insert("term_taxonomy").Columns("description")
 
 	pr, pw := io.Pipe()
-	defer pr.Close()
-	defer pw.Close()
+	defer func() {
+		err := pr.Close()
+		if err != nil {
+			t.Fatalf("Error close pipe reader: %s", err)
+		}
+	}()
+	defer func() {
+		err := pw.Close()
+		if err != nil {
+			t.Fatalf("Error close pipe writer: %s", err)
+		}
+	}()
 	go func() {
 		r.Processing(
 			values,
@@ -91,12 +101,19 @@ func Test_Paginator_Processing(t *testing.T) {
 				return false
 			},
 			func(p interface{}) interface{} {
-				pw.Write([]byte(fmt.Sprintf("%s;", squirrel.DebugSqlizer(s))))
+				if _, err := pw.Write([]byte(fmt.Sprintf("%s;", squirrel.DebugSqlizer(s)))); err != nil {
+					t.Fatalf("Error close pipe writer: %s", err)
+				}
 				s = squirrel.Insert("term_taxonomy").Columns("description")
 				return false
 			},
 		)
-		pw.Close()
+		defer func() {
+			err := pw.Close()
+			if err != nil {
+				t.Fatalf("Error close pipe writer: %s", err)
+			}
+		}()
 	}()
 	body, _ := ioutil.ReadAll(pr)
 

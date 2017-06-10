@@ -14,38 +14,49 @@ import (
 	squirrel "gopkg.in/Masterminds/squirrel.v1"
 )
 
+// Exporter is the interface that wraps the basic Export method
+type Exporter interface {
+	Export(writer io.WriteCloser) (chan error)
+}
+
 type woocommece struct {
 	storage storage.Store
 	prefix  string
 }
 
 // NewExporter return woocommece instance
-func NewExporter(storage storage.Store, prefix string) *woocommece {
+func NewExporter(storage storage.Store, prefix string) Exporter {
 	return &woocommece{
 		storage: storage,
 		prefix:  prefix,
 	}
 }
 
-func (w *woocommece) Export(writer *io.PipeWriter) (err error) {
+func (w *woocommece) Export(writer io.WriteCloser) (chan error) {
+	ch := make(chan error, 1)
 	groups, err := w.storage.Groups("")
 	if err != nil {
-		return err
+		ch <- err
 	}
 	var startTermID, startTaxonomyID = 1, 0
-	terms, termsTaxonomy := Terms(&startTermID, startTaxonomyID, groups)
+	terms, termsTaxonomy := makeTerms(&startTermID, startTaxonomyID, groups)
 
-	posts, err := w.storage.Posts("")
+	products, err := w.storage.Products()
 	if err != nil {
-		return err
+		ch <- err
 	}
+	posts, relShip := makePosts(products)
 
 	go func() {
-		writer.Write([]byte("start transaction;\n"))
+		if _, err := writer.Write([]byte("start transaction;\n")); err != nil {
+			ch <- err
+		}
 
 		for k, v := range variables {
 			key := strings.Replace(slugmaker.Make(k), "-", "", -1)
-			writer.Write([]byte(fmt.Sprintf("set @%s=%d;\n", key, v)))
+			if _, err := writer.Write([]byte(fmt.Sprintf("set @%s=%d;\n", key, v))); err != nil {
+				ch <- err
+			}
 		}
 
 		values := make([]interface{}, len(terms))
@@ -64,7 +75,9 @@ func (w *woocommece) Export(writer *io.PipeWriter) (err error) {
 				return false
 			},
 			func(interface{}) interface{} {
-				writer.Write([]byte(fmt.Sprintf("%s;\n", squirrel.DebugSqlizer(b))))
+				if _, err := writer.Write([]byte(fmt.Sprintf("%s;\n", squirrel.DebugSqlizer(b)))); err != nil {
+					ch <- err
+				}
 				b = w.builderTerm()
 				return false
 			},
@@ -83,7 +96,9 @@ func (w *woocommece) Export(writer *io.PipeWriter) (err error) {
 				return false
 			},
 			func(interface{}) interface{} {
-				writer.Write([]byte(fmt.Sprintf("%s;\n", squirrel.DebugSqlizer(bt))))
+				if _, err := writer.Write([]byte(fmt.Sprintf("%s;\n", squirrel.DebugSqlizer(bt)))); err != nil {
+					ch <- err
+				}
 				bt = w.builderTermTaxonomy()
 				return false
 			},
@@ -101,17 +116,43 @@ func (w *woocommece) Export(writer *io.PipeWriter) (err error) {
 				return false
 			},
 			func(interface{}) interface{} {
-				writer.Write([]byte(fmt.Sprintf("%s;\n", squirrel.DebugSqlizer(bp))))
+				if _, err := writer.Write([]byte(fmt.Sprintf("%s;\n", squirrel.DebugSqlizer(bp)))); err != nil {
+					ch <- err
+				}
 				bp = w.builderPost()
 				return false
 			},
 		)
 
-		writer.Write([]byte("commit;\n"))
-		writer.Close()
+		brs := w.builderTermRelationships()
+		valBrs := make([]interface{}, len(relShip))
+		for i, v := range relShip {
+			valBrs[i] = v
+		}
+		p.Processing(
+			valBrs,
+			func(p interface{}) interface{} {
+				brs.AddTermRelationships(p.(termRelationship))
+				return false
+			},
+			func(interface{}) interface{} {
+				if _, err := writer.Write([]byte(fmt.Sprintf("%s;\n", squirrel.DebugSqlizer(brs)))); err != nil {
+					ch <- err
+				}
+				brs = w.builderTermRelationships()
+				return false
+			},
+		)
+
+		if _, err := writer.Write([]byte("commit;\n")); err != nil {
+			ch <- err
+		}
+		if err := writer.Close(); err != nil {
+			ch <- err
+		}
 	}()
 
-	return
+	return ch
 }
 
 var variables = make(map[string]int)
@@ -150,7 +191,7 @@ func (i taxonomyID) String() string {
 	return fmt.Sprintf("@max_term_taxonomy_id+%d", i)
 }
 
-func Terms(startTermID *int, startTaxonomyID int, groups []commerceml.Group) ([]term, []termTaxonomy) {
+func makeTerms(startTermID *int, startTaxonomyID int, groups []commerceml.Group) ([]term, []termTaxonomy) {
 	var terms []term
 	var termsTaxonomy []termTaxonomy
 	for _, i := range groups {
@@ -177,7 +218,7 @@ func Terms(startTermID *int, startTaxonomyID int, groups []commerceml.Group) ([]
 		termsTaxonomy = append(termsTaxonomy, tt)
 		*startTermID++
 		if len(i.Groups) > 0 {
-			childsTerms, childsTermsTaxonomy := Terms(startTermID, parentTaxonomyID, i.Groups)
+			childsTerms, childsTermsTaxonomy := makeTerms(startTermID, parentTaxonomyID, i.Groups)
 			terms = append(terms, childsTerms...)
 			termsTaxonomy = append(termsTaxonomy, childsTermsTaxonomy...)
 		}
@@ -202,7 +243,7 @@ type post struct {
 	Pinged          string
 	Modified        time.Time
 	ContentFiltered string
-	ParentID        postID
+	ParentID        string //postID
 	GUID            string
 	MenuOrder       int
 	Type            string //post
@@ -222,14 +263,32 @@ func (i authorID) String() string {
 	return "@author_id"
 }
 
-func Posts(products []commerceml.Product) ([]post, []termRelationship) {
+func makePosts(products []commerceml.Product) ([]post, []termRelationship) {
 	var posts []post
 	var rels []termRelationship
 	var startID = 1
 	for _, i := range products {
 		p := post{
-			ID:      postID(startID),
-			Content: i.Description.Value,
+			ID:              postID(startID),
+			Date:            time.Now(),
+			Content:         i.Description.Value,
+			Title:           i.Name,
+			Excerpt:         "",
+			Status:          "publish",
+			CommentStatus:   "open",
+			PingStatus:      "open",
+			Password:        "",
+			Name:            i.Name,
+			ToPing:          "",
+			Pinged:          "",
+			Modified:        time.Now(),
+			ContentFiltered: "",
+			ParentID:        "",
+			GUID:            "",
+			MenuOrder:       0,
+			Type:            "post",
+			MimeType:        "",
+			CommentCount:    0,
 		}
 		startID++
 
@@ -241,6 +300,7 @@ func Posts(products []commerceml.Product) ([]post, []termRelationship) {
 			}
 			rels = append(rels, tr)
 		}
+		posts = append(posts, p)
 	}
 	return posts, rels
 }
@@ -272,7 +332,7 @@ func (b *builder) AddPost(post post) {
 	*b = builder{
 		b.Values(
 			squirrel.Expr(post.ID.String()),
-			post.AuthorID.String(),
+			squirrel.Expr(post.AuthorID.String()),
 			post.Date.String(),
 			post.Date.UTC().String(),
 			post.Content,
@@ -289,7 +349,7 @@ func (b *builder) AddPost(post post) {
 			post.Pinged,
 			post.Modified.String(),
 			post.Modified.UTC().String(),
-			squirrel.Expr(post.ParentID.String()),
+			post.ParentID,
 			post.MenuOrder,
 			post.MimeType,
 			post.GUID,
@@ -300,9 +360,9 @@ func (b *builder) AddPost(post post) {
 func (b *builder) AddTermRelationships(r termRelationship) {
 	var prefix string
 	switch reflect.TypeOf(r.ObjectType) {
-	case post{}:
+	case reflect.TypeOf(post{}):
 		prefix = "max_post_id"
-	case term{}:
+	case reflect.TypeOf(term{}):
 		prefix = "max_term_id"
 	}
 
@@ -333,19 +393,19 @@ func (b *builder) TermsTaxonomy(taxonomyID int, t []termTaxonomy) {
 
 func (w *woocommece) builderTerm() builder {
 	return builder{
-		squirrel.Insert(w.prefix+"terms").Columns("term_id", "name", "slug", "parent"),
+		squirrel.Insert(w.prefix + "terms").Columns("term_id", "name", "slug", "parent"),
 	}
 }
 
 func (w *woocommece) builderTermTaxonomy() builder {
 	return builder{
-		squirrel.Insert(w.prefix+"term_taxonomy").Columns("term_taxonomy_id", "term_id", "taxonomy", "description", "parent", "count"),
+		squirrel.Insert(w.prefix + "term_taxonomy").Columns("term_taxonomy_id", "term_id", "taxonomy", "description", "parent", "count"),
 	}
 }
 
 func (w *woocommece) builderPost() builder {
 	return builder{
-		squirrel.Insert(w.prefix+"posts").Columns(
+		squirrel.Insert(w.prefix + "posts").Columns(
 			"post_author",
 			"post_date",
 			"post_date_gmt",
@@ -373,6 +433,6 @@ func (w *woocommece) builderPost() builder {
 
 func (w *woocommece) builderTermRelationships() builder {
 	return builder{
-		squirrel.Insert(w.prefix+"term_relationships").Columns("object_id", "term_taxonomy_id", "term_order"),
+		squirrel.Insert(w.prefix + "term_relationships").Columns("object_id", "term_taxonomy_id", "term_order"),
 	}
 }

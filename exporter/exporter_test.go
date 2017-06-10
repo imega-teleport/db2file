@@ -25,7 +25,7 @@ func Test_Terms_WithGroupLevel1_ReturnTerm(t *testing.T) {
 	}
 
 	var startTermID, startTaxonomyID = 1, 0
-	terms, _ := Terms(&startTermID, startTaxonomyID, groups)
+	terms, _ := makeTerms(&startTermID, startTaxonomyID, groups)
 
 	assert.Equal(t, []term{
 		{
@@ -82,7 +82,7 @@ func Test_Terms_WithGroupLevel2_ReturnTerm(t *testing.T) {
 	}
 
 	var startTermID, startTaxonomyID = 1, 0
-	terms, _ := Terms(&startTermID, startTaxonomyID, groups)
+	terms, _ := makeTerms(&startTermID, startTaxonomyID, groups)
 
 	assert.Equal(t, []term{
 		{
@@ -179,7 +179,7 @@ func Test_Terms_WithGroupLevel3_ReturnTerm(t *testing.T) {
 	}
 
 	var startTermID, startTaxonomyID = 1, 0
-	terms, _ := Terms(&startTermID, startTaxonomyID, groups)
+	terms, _ := makeTerms(&startTermID, startTaxonomyID, groups)
 
 	assert.Equal(t, []term{
 		{
@@ -250,7 +250,7 @@ func Test_TermsTaxonomy_WithGroupLevel1_ReturnTermTaxonomy(t *testing.T) {
 	}
 
 	var startTermID, startTaxonomyID = 1, 0
-	_, termsTaxonomy := Terms(&startTermID, startTaxonomyID, groups)
+	_, termsTaxonomy := makeTerms(&startTermID, startTaxonomyID, groups)
 
 	assert.Equal(t, []termTaxonomy{
 		{
@@ -311,7 +311,7 @@ func Test_TermsTaxonomy_WithGroupLevel2_ReturnTerm(t *testing.T) {
 	}
 
 	var startTermID, startTaxonomyID = 1, 0
-	_, termsTaxonomy := Terms(&startTermID, startTaxonomyID, groups)
+	_, termsTaxonomy := makeTerms(&startTermID, startTaxonomyID, groups)
 
 	assert.Equal(t, []termTaxonomy{
 		{
