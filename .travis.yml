@@ -1,21 +1,15 @@
 language: go
-
 services:
-  - docker
-
+- docker
 go:
-  - 1.8
-
+- 1.8
 install:
-  - go get gopkg.in/alecthomas/gometalinter.v1
-  - gometalinter.v1 --install
-
+- go get gopkg.in/alecthomas/gometalinter.v1
+- gometalinter.v1 --install
 before_script:
-  - gometalinter.v1 --disable-all --enable=goimports --enable=gofmt ./...
-
+- gometalinter.v1 --disable-all --enable=goimports --enable=gofmt ./...
 script:
-  - make build
-
+- make build
 notifications:
   slack:
-    secure: NmT1eppSt2njoSn6K2i+eE4lbuPi+/q7K26sHSUPCjthGKqnHHCfuU0mX25YCrDxWrdhSbzxvEQJ42J2+cFMnPv1Z9hcQzYSLO6QOouAhPkoDHSx6lJOndG69j8WDyiVvXe8OCTGyR++p+co5ks+DbPr7ogfXBzOQmLXDzCEj8U1iyVn3/JwlUEgbitExxtYKvmc/+3T2K5BiDyZcUetw8HPeEQz4fsBttxvpp4fZQpgcWqRv20k+nRlxhaV16YEXuNPlS7kCd4kWt1VhriBk10enZcafxnGhmdX/Aw16mG5bor9xCkiJqdHP8+IK7amIoHHwB27XmoT6tqvFND4Oh7wTkA4a2b72VcTcrgkiMReuLxY0nZ9DxixqEzM9foAsIIWmGq3TbrXMaFGCvxXmbwma2x+uwX7ZqOd+5j5GEkFEe60MEtgMjE8KAX+pHE3Yp3/b69Bb3G5cPcdQMW3P0fJFNkdl1JdvYA3mf9eS0Il8w+cbMOAHzV5uP1br91ji7JusvOqHlbtGQv6+ys2mKyX590D22nQ8yv0xFCMSVhb2QhaLNf4v0p9+LE041+r/8e4FrYx4n5CLePQyNGQ/EZx/frv4Io38RlKNHJOpJhut6uX4/kWBWbtSUSIPIfCxs2Yi7BbdI5tx538yHMduI5RcmNeBf7+joGs1jUo6VU=
+    secure: GSy8ZrwofrubjK+2baXWSB8HmRwtMw3zR6g9QvPIpdYLxSKjCH5DjalwEOqP9qD4btczMO5VYJOUEs+gTc9AybipJFPevL9qVFqhbtuW0BLzmm3gCfrpHoF+pB5mjSfNMQP0Sl1tIhb3A9wRJtpDnQhG/1E3nU1C9X1dEwxUkG25H8XJNxm3U6/6sGvWCaG5AmA/u3hYjst63LgV6SZ23MgEYfQqMrVo7ZBnLotXWDUA1ZyW3j46F4maHEVI1ThhleFrUVOuxq/xlGDryRLs20h2juhaAvmu8GYH+yF0WyoQ8RDbbDC3OsHCweCD/AxksjETt0Ej2oiK3gOHjkVrsSpG9jicWL0uUiH2QHdClOn//xvZzZNhty6EjfLQclXPFpfTGnfpBzZcp+sxyjwCrVHaeV9dG7vagflK+dzCFTVAG85U0n2hZmJ2HSOT4RcvOWEMQYef+azskt3CkYLoBG/wSV5jZYbPsUM6WguFW9B9mhos+Mpg+xN8BeGzKop8qYF6RnXWQN22m6ZdiSj1GHrpjZwYj3sII92QJsawSCGtao9mP9igvBEdLwcDrJVehfyfhukaEb2HL7mzkqZmf7HTe7w9U58Dd2Un0plmDPscPz0l1UZw4b6eRLlu895gOIav5+9KIVFPB1ArjNJ7BI2IK8E/GO8LfB3/YrHO+j8=
