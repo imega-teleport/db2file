@@ -14,4 +14,4 @@ before_script:
   - gometalinter.v1 --disable-all --enable=goimports --enable=gofmt ./...
 
 script:
-  - make build || exit 1
+  - make build
