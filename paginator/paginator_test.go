@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"gopkg.in/Masterminds/squirrel.v1"
+	squirrel "gopkg.in/Masterminds/squirrel.v1"
 )
 
 func Test_Paginator_Processing(t *testing.T) {

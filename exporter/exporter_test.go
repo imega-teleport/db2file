@@ -5,7 +5,7 @@ import (
 
 	"github.com/imega-teleport/xml2db/commerceml"
 	"github.com/stretchr/testify/assert"
-	"gopkg.in/Masterminds/squirrel.v1"
+	squirrel "gopkg.in/Masterminds/squirrel.v1"
 )
 
 func Test_Terms_WithGroupLevel1_ReturnTerm(t *testing.T) {

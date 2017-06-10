@@ -11,7 +11,7 @@ import (
 	"github.com/imega-teleport/db2file/paginator"
 	"github.com/imega-teleport/db2file/storage"
 	"github.com/imega-teleport/xml2db/commerceml"
-	"gopkg.in/Masterminds/squirrel.v1"
+	squirrel "gopkg.in/Masterminds/squirrel.v1"
 )
 
 type woocommece struct {
