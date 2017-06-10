@@ -4,7 +4,7 @@ services:
   - docker
 
 go:
-  - 1.7.x
+  - 1.8
 
 install:
   - go get gopkg.in/alecthomas/gometalinter.v1
