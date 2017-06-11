@@ -8,6 +8,10 @@ build: test
 		-e GOOS=linux \
 		-e GOARCH=amd64 \
 		-e CGO_ENABLED=0 \
+		-e DB_USER=root \
+		-e DB_PASS=1 \
+		-e DB_HOST="server_db:3306" \
+		--link server_db:server_db \
 		golang:1.8-alpine \
 		sh -c 'go build -v -o db2file && ./db2file -db test_teleport -path $(CWD)/test'
 	ls -l $(CURDIR)/test
@@ -16,7 +20,6 @@ db:
 	@touch $(CURDIR)/mysql.log
 	@docker run -d \
 		--name "server_db" \
-		-p 3306:3306 \
 		-v $(CURDIR)/sql/cnf:/etc/mysql/conf.d \
 		-v $(CURDIR)/mysql.log:/var/log/mysql/mysql.log \
 		imega/mysql
