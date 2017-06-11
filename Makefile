@@ -3,6 +3,11 @@ CWD=/go/src/github.com/imega-teleport/db2file
 build: test
 	@mkdir $(CURDIR)/test
 	@docker run --rm \
+		-v $(CURDIR)/sql:/sql \
+		--link server_db:s \
+		imega/mysql-client \
+		mysql --host=s --database=test_teleport -e "source /sql/dump.sql"
+	@docker run --rm \
 		-v $(CURDIR):$(CWD) \
 		-w $(CWD) \
 		-e GOOS=linux \

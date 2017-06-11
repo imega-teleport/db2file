@@ -54,8 +54,8 @@ func main() {
 		fmt.Printf("Error in export: %v", err)
 		os.Exit(1)
 	}*/
-	body, _ := ioutil.ReadAll(r)
-	fmt.Printf("%s", body)
+	//body, _ := ioutil.ReadAll(r)
+	//fmt.Printf("%s", body)
 
 	file, err := os.Create(fmt.Sprintf("%s%c%s", *path, os.PathSeparator, "output.sql"))
 	if err != nil {
