@@ -19,7 +19,7 @@ func main() {
 	dbname := flag.String("db", "", "Database name")
 	flag.Parse()
 
-	dsn := fmt.Sprintf("mysql://%s:%s@tcp(%s)/%s", user, pass, host, dbname)
+	dsn := fmt.Sprintf("mysql://%s:%s@tcp(%s)/%s", user, pass, host, *dbname)
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		fmt.Printf("error: %s", err)

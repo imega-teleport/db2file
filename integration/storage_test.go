@@ -152,12 +152,12 @@ func Test_Products_ReturnsProducts(t *testing.T) {
 	defer teardown()
 
 	s := mysql.NewStorage(db)
-	products, err := s.products()
+	products, err := s.Products()
 	assert.NoError(t, err)
 
 	expected := []commerceml.Product{
 		{
-			IdName: []commerceml.IdName{
+			IdName: commerceml.IdName{
 				Id:   "b9f7eba5-ae8b-11e3-8162-003048f2904a",
 				Name: "prod1_name",
 			},
@@ -171,7 +171,7 @@ func Test_Products_ReturnsProducts(t *testing.T) {
 			Brand:    "prod1_brand",
 		},
 		{
-			IdName: []commerceml.IdName{
+			IdName: commerceml.IdName{
 				Id:   "7077e5f0-f2a5-11de-bc7e-0022b0527b2e",
 				Name: "prod2_name",
 			},
@@ -185,5 +185,5 @@ func Test_Products_ReturnsProducts(t *testing.T) {
 			Brand:    "prod2_brand",
 		},
 	}
-	assert.Equal(t, expected, groups)
+	assert.Equal(t, expected, products)
 }
