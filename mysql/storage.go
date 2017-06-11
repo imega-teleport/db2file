@@ -141,7 +141,7 @@ func (s *storage) Products() (products []commerceml.Product, err error) {
 }
 
 func (s *storage) productGroup(parentID string) (groups []commerceml.Group, err error) {
-	rows, err := s.db.Query("select id from products_groups where = ?", parentID)
+	rows, err := s.db.Query("select id from products_groups where parent_id = ?", parentID)
 	if err != nil {
 		return nil, err
 	}
