@@ -16,6 +16,7 @@ db:
 	@touch $(CURDIR)/mysql.log
 	@docker run -d \
 		--name "server_db" \
+		-p 3306:3306 \
 		-v $(CURDIR)/sql/cnf:/etc/mysql/conf.d \
 		-v $(CURDIR)/mysql.log:/var/log/mysql/mysql.log \
 		imega/mysql
