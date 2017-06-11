@@ -188,7 +188,7 @@ func Test_Products_ReturnsProducts(t *testing.T) {
 	assert.Equal(t, expected, products)
 }
 
-func Test_ProductGroup_Returns(t *testing.T) {
+func Test_productGroup_ReturnsGroups(t *testing.T) {
 	db, teardown := dbUnit.setup(t, "products_groups", func(db *sql.DB) (err error) {
 		_, err = db.Query(
 			"INSERT products_groups VALUES (?,?)",
@@ -208,28 +208,13 @@ func Test_ProductGroup_Returns(t *testing.T) {
 	defer teardown()
 
 	s := mysql.NewStorage(db)
-	products, err := s.ProductGroup()
+	products, err := s.productGroup("7077e5f0-f2a5-11de-bc7e-0022b0527b2e")
 	assert.NoError(t, err)
 
-	expected := []commerceml.Product{
+	expected := []commerceml.Group{
 		{
 			IdName: commerceml.IdName{
-				Id: "b9f7eba5-ae8b-11e3-8162-003048f2904a",
-			},
-			Groups: commerceml.Group{
-				IdName: commerceml.IdName{
-					Id: "de258629-6b29-11e4-8220-005056b9f84b",
-				},
-			},
-		},
-		{
-			IdName: commerceml.IdName{
-				Id: "7077e5f0-f2a5-11de-bc7e-0022b0527b2e",
-			},
-			Groups: commerceml.Group{
-				IdName: commerceml.IdName{
-					Id: "cf0c4f35-b32c-11e3-8162-003048f2904a",
-				},
+				Id: "cf0c4f35-b32c-11e3-8162-003048f2904a",
 			},
 		},
 	}

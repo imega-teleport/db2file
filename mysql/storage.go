@@ -124,8 +124,37 @@ func (s *storage) Products() (products []commerceml.Product, err error) {
 			FullName: item.FullName,
 			Country:  item.Country,
 			Brand:    item.Brand,
+			Groups:   s.productGroup(item.ID),
 		}
 		products = append(products, product)
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+func (s *storage) productGroup(parentID string) (groups []commerceml.Group, err error) {
+	rows, err := s.db.Query("select id from products_groups where = ?", parentID)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		item := struct {
+			ID string
+		}{}
+		err = rows.Scan(&item.ID)
+		if err != nil {
+			return nil, err
+		}
+		group := commerceml.Group{
+			IdName: commerceml.IdName{
+				Id: item.ID,
+			},
+		}
+		groups = append(groups, group)
 	}
 	err = rows.Err()
 	if err != nil {
