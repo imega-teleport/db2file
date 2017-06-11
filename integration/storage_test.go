@@ -17,7 +17,7 @@ type dbunit struct {
 	t  *testing.T
 }
 
-func (u *dbunit) setup(t *testing.T, tableName string, fixture func(db *sql.DB) (err error)) (db *sql.DB, teardown func()) {
+func (u *dbunit) setup(t *testing.T, tableName []string, fixture func(db *sql.DB) (err error)) (db *sql.DB, teardown func()) {
 	user, pass, host, dbname := os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_HOST"), os.Getenv("DB_NAME")
 	dsn := fmt.Sprintf("mysql://%s:%s@tcp(%s)/%s", user, pass, host, dbname)
 	db, err := sql.Open("mysql", dsn)
@@ -26,8 +26,10 @@ func (u *dbunit) setup(t *testing.T, tableName string, fixture func(db *sql.DB) 
 	}
 	u.db = db
 
-	if _, err := db.Exec(fmt.Sprintf("TRUNCATE %s", tableName)); err != nil {
-		t.Fatalf("Could not truncate table %s: %s", tableName, err)
+	for _, n := range tableName {
+		if _, err := db.Exec(fmt.Sprintf("TRUNCATE %s", n)); err != nil {
+			t.Fatalf("Could not truncate table %s: %s", n, err)
+		}
 	}
 
 	if err := fixture(db); err != nil {
@@ -35,8 +37,10 @@ func (u *dbunit) setup(t *testing.T, tableName string, fixture func(db *sql.DB) 
 	}
 
 	teardown = func() {
-		if _, err := db.Exec(fmt.Sprintf("TRUNCATE %s", tableName)); err != nil {
-			t.Fatalf("Could not truncate table %s: %s", tableName, err)
+		for _, n := range tableName {
+			if _, err := db.Exec(fmt.Sprintf("TRUNCATE %s", n)); err != nil {
+				t.Fatalf("Could not truncate table %s: %s", n, err)
+			}
 		}
 
 		if err := db.Close(); err != nil {
@@ -49,7 +53,7 @@ func (u *dbunit) setup(t *testing.T, tableName string, fixture func(db *sql.DB) 
 var dbUnit = &dbunit{}
 
 func Test_Groups_ReturnsGroups(t *testing.T) {
-	db, teardown := dbUnit.setup(t, "groups", func(db *sql.DB) (err error) {
+	db, teardown := dbUnit.setup(t, []string{"groups"}, func(db *sql.DB) (err error) {
 		_, err = db.Query("INSERT groups VALUES (?,?,?)", "ecc82696-3f98-11de-991a-001c23888998", "", "Group 1")
 		return
 	})
@@ -72,7 +76,7 @@ func Test_Groups_ReturnsGroups(t *testing.T) {
 }
 
 func Test_Groups_NotExistsGroup_ReturnsEmptyGroups(t *testing.T) {
-	db, teardown := dbUnit.setup(t, "groups", func(db *sql.DB) (err error) {
+	db, teardown := dbUnit.setup(t, []string{"groups"}, func(db *sql.DB) (err error) {
 		return
 	})
 	defer teardown()
@@ -86,7 +90,7 @@ func Test_Groups_NotExistsGroup_ReturnsEmptyGroups(t *testing.T) {
 }
 
 func Test_Groups_WithChildGroup_ReturnsGroups(t *testing.T) {
-	db, teardown := dbUnit.setup(t, "groups", func(db *sql.DB) (err error) {
+	db, teardown := dbUnit.setup(t, []string{"groups"}, func(db *sql.DB) (err error) {
 		_, err = db.Query("INSERT groups VALUES (?,?,?)", "ecc82696-3f98-11de-991a-001c23888998", "", "Group 1")
 		if err != nil {
 			return
@@ -121,7 +125,7 @@ func Test_Groups_WithChildGroup_ReturnsGroups(t *testing.T) {
 }
 
 func Test_Products_ReturnsProducts(t *testing.T) {
-	db, teardown := dbUnit.setup(t, "products", func(db *sql.DB) (err error) {
+	db, teardown := dbUnit.setup(t, []string{"products", "products_groups"}, func(db *sql.DB) (err error) {
 		_, err = db.Query(
 			"INSERT products VALUES (?,?,?,?,?,?,?,?)",
 			"b9f7eba5-ae8b-11e3-8162-003048f2904a",
