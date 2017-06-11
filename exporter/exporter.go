@@ -16,7 +16,7 @@ import (
 
 // Exporter is the interface that wraps the basic Export method
 type Exporter interface {
-	Export(writer io.WriteCloser) (chan error)
+	Export(writer io.WriteCloser) chan error
 }
 
 type woocommece struct {
@@ -32,7 +32,7 @@ func NewExporter(storage storage.Store, prefix string) Exporter {
 	}
 }
 
-func (w *woocommece) Export(writer io.WriteCloser) (chan error) {
+func (w *woocommece) Export(writer io.WriteCloser) chan error {
 	ch := make(chan error, 1)
 	groups, err := w.storage.Groups("")
 	if err != nil {
@@ -359,7 +359,7 @@ func (b *builder) AddPost(post post) {
 
 func (b *builder) AddTermRelationships(r termRelationship) {
 	var prefix string
-	switch reflect.TypeOf(r.ObjectType) {
+	switch reflect.TypeOf(*r.ObjectType) {
 	case reflect.TypeOf(post{}):
 		prefix = "max_post_id"
 	case reflect.TypeOf(term{}):
@@ -393,19 +393,19 @@ func (b *builder) TermsTaxonomy(taxonomyID int, t []termTaxonomy) {
 
 func (w *woocommece) builderTerm() builder {
 	return builder{
-		squirrel.Insert(w.prefix + "terms").Columns("term_id", "name", "slug", "parent"),
+		squirrel.Insert(w.prefix+"terms").Columns("term_id", "name", "slug", "parent"),
 	}
 }
 
 func (w *woocommece) builderTermTaxonomy() builder {
 	return builder{
-		squirrel.Insert(w.prefix + "term_taxonomy").Columns("term_taxonomy_id", "term_id", "taxonomy", "description", "parent", "count"),
+		squirrel.Insert(w.prefix+"term_taxonomy").Columns("term_taxonomy_id", "term_id", "taxonomy", "description", "parent", "count"),
 	}
 }
 
 func (w *woocommece) builderPost() builder {
 	return builder{
-		squirrel.Insert(w.prefix + "posts").Columns(
+		squirrel.Insert(w.prefix+"posts").Columns(
 			"post_author",
 			"post_date",
 			"post_date_gmt",
@@ -433,6 +433,6 @@ func (w *woocommece) builderPost() builder {
 
 func (w *woocommece) builderTermRelationships() builder {
 	return builder{
-		squirrel.Insert(w.prefix + "term_relationships").Columns("object_id", "term_taxonomy_id", "term_order"),
+		squirrel.Insert(w.prefix+"term_relationships").Columns("object_id", "term_taxonomy_id", "term_order"),
 	}
 }
