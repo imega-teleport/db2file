@@ -7,7 +7,7 @@ install:
 - go get gopkg.in/alecthomas/gometalinter.v1
 - gometalinter.v1 --install
 before_script:
-- pwd
+- make dep
 - gometalinter.v1 --vendor --deadline=300s --disable=gotype --disable=gocyclo ./...
 script:
 - make build

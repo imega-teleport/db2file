@@ -1,6 +1,15 @@
 CWD=/go/src/github.com/imega-teleport/db2file
 
 build: dep test
+	@docker run --rm \
+		-v $(CURDIR):$(CWD) \
+		-w $(CWD) \
+		-e GOOS=linux \
+		-e GOARCH=amd64 \
+		-e CGO_ENABLED=0 \
+		golang:1.8-alpine \
+		sh -c 'go build -v -o rel/db2file'
+	ls -l $(CURDIR)/rel
 
 db:
 	@touch $(CURDIR)/mysql.log
