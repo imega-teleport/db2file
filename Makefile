@@ -19,7 +19,7 @@ build: test
 		--link server_db:server_db \
 		golang:1.8-alpine \
 		sh -c 'go build -v -o db2file && ./db2file -db test_teleport -path $(CWD)/test'
-	ls -l $(CURDIR)/test
+	cat $(CURDIR)/test
 
 db:
 	@touch $(CURDIR)/mysql.log
