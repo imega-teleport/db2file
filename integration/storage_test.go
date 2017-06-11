@@ -147,6 +147,22 @@ func Test_Products_ReturnsProducts(t *testing.T) {
 			"prod2_country",
 			"prod2_brand",
 		)
+		if err != nil {
+			return
+		}
+		_, err = db.Query(
+			"INSERT products_groups VALUES (?,?)",
+			"b9f7eba5-ae8b-11e3-8162-003048f2904a",
+			"de258629-6b29-11e4-8220-005056b9f84b",
+		)
+		if err != nil {
+			return
+		}
+		_, err = db.Query(
+			"INSERT products_groups VALUES (?,?)",
+			"7077e5f0-f2a5-11de-bc7e-0022b0527b2e",
+			"cf0c4f35-b32c-11e3-8162-003048f2904a",
+		)
 		return
 	})
 	defer teardown()
@@ -169,6 +185,13 @@ func Test_Products_ReturnsProducts(t *testing.T) {
 			FullName: "prod1_fullname",
 			Country:  "prod1_country",
 			Brand:    "prod1_brand",
+			Groups: []commerceml.Group{
+				{
+					IdName: commerceml.IdName{
+						Id: "de258629-6b29-11e4-8220-005056b9f84b",
+					},
+				},
+			},
 		},
 		{
 			IdName: commerceml.IdName{
@@ -183,41 +206,14 @@ func Test_Products_ReturnsProducts(t *testing.T) {
 			FullName: "prod2_fullname",
 			Country:  "prod2_country",
 			Brand:    "prod2_brand",
-		},
-	}
-	assert.Equal(t, expected, products)
-}
-
-func Test_productGroup_ReturnsGroups(t *testing.T) {
-	db, teardown := dbUnit.setup(t, "products_groups", func(db *sql.DB) (err error) {
-		_, err = db.Query(
-			"INSERT products_groups VALUES (?,?)",
-			"b9f7eba5-ae8b-11e3-8162-003048f2904a",
-			"de258629-6b29-11e4-8220-005056b9f84b",
-		)
-		if err != nil {
-			return
-		}
-		_, err = db.Query(
-			"INSERT products_groups VALUES (?,?)",
-			"7077e5f0-f2a5-11de-bc7e-0022b0527b2e",
-			"cf0c4f35-b32c-11e3-8162-003048f2904a",
-		)
-		return
-	})
-	defer teardown()
-
-	s := mysql.NewStorage(db)
-	products, err := s.productGroup("7077e5f0-f2a5-11de-bc7e-0022b0527b2e")
-	assert.NoError(t, err)
-
-	expected := []commerceml.Group{
-		{
-			IdName: commerceml.IdName{
-				Id: "cf0c4f35-b32c-11e3-8162-003048f2904a",
+			Groups: []commerceml.Group{
+				{
+					IdName: commerceml.IdName{
+						Id: "cf0c4f35-b32c-11e3-8162-003048f2904a",
+					},
+				},
 			},
 		},
 	}
-
 	assert.Equal(t, expected, products)
 }

@@ -111,6 +111,10 @@ func (s *storage) Products() (products []commerceml.Product, err error) {
 		if err != nil {
 			return nil, err
 		}
+		groups, err := s.productGroup(item.ID)
+		if err != nil {
+			return nil, err
+		}
 		product := commerceml.Product{
 			IdName: commerceml.IdName{
 				Id:   item.ID,
@@ -124,7 +128,7 @@ func (s *storage) Products() (products []commerceml.Product, err error) {
 			FullName: item.FullName,
 			Country:  item.Country,
 			Brand:    item.Brand,
-			Groups:   s.productGroup(item.ID),
+			Groups:   groups,
 		}
 		products = append(products, product)
 	}
@@ -155,40 +159,6 @@ func (s *storage) productGroup(parentID string) (groups []commerceml.Group, err 
 			},
 		}
 		groups = append(groups, group)
-	}
-	err = rows.Err()
-	if err != nil {
-		return nil, err
-	}
-	return
-}
-
-func (s *storage) ProductGroup() (products []commerceml.Product, err error) {
-	rows, err := s.db.Query("select parent_id,id from products_groups")
-	if err != nil {
-		return nil, err
-	}
-
-	for rows.Next() {
-		item := struct {
-			ParentID string
-			ID       string
-		}{}
-		err = rows.Scan(&item.ParentID, &item.ID)
-		if err != nil {
-			return nil, err
-		}
-		product := commerceml.Product{
-			IdName: commerceml.IdName{
-				Id: item.ParentID,
-			},
-			Groups: commerceml.Group{
-				IdName: commerceml.IdName{
-					Id: item.ID,
-				},
-			},
-		}
-		products = append(products, product)
 	}
 	err = rows.Err()
 	if err != nil {
