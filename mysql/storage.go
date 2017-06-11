@@ -111,7 +111,8 @@ func (s *storage) Products() (products []commerceml.Product, err error) {
 		if err != nil {
 			return nil, err
 		}
-		groups, err := s.productGroup(item.ID)
+		var groups []commerceml.Group
+		groups, err = s.productGroup(item.ID)
 		if err != nil {
 			return nil, err
 		}
