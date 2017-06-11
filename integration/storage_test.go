@@ -137,7 +137,7 @@ func Test_Products_ReturnsProducts(t *testing.T) {
 			return
 		}
 		_, err = db.Query(
-			"INSERT groups VALUES (?,?,?,?,?,?,?,?)",
+			"INSERT products VALUES (?,?,?,?,?,?,?,?)",
 			"7077e5f0-f2a5-11de-bc7e-0022b0527b2e",
 			"prod2_name",
 			"prod2_description",
@@ -185,5 +185,54 @@ func Test_Products_ReturnsProducts(t *testing.T) {
 			Brand:    "prod2_brand",
 		},
 	}
+	assert.Equal(t, expected, products)
+}
+
+func Test_ProductGroup_Returns(t *testing.T) {
+	db, teardown := dbUnit.setup(t, "products_groups", func(db *sql.DB) (err error) {
+		_, err = db.Query(
+			"INSERT products_groups VALUES (?,?)",
+			"b9f7eba5-ae8b-11e3-8162-003048f2904a",
+			"de258629-6b29-11e4-8220-005056b9f84b",
+		)
+		if err != nil {
+			return
+		}
+		_, err = db.Query(
+			"INSERT products_groups VALUES (?,?)",
+			"7077e5f0-f2a5-11de-bc7e-0022b0527b2e",
+			"cf0c4f35-b32c-11e3-8162-003048f2904a",
+		)
+		return
+	})
+	defer teardown()
+
+	s := mysql.NewStorage(db)
+	products, err := s.ProductGroup()
+	assert.NoError(t, err)
+
+	expected := []commerceml.Product{
+		{
+			IdName: commerceml.IdName{
+				Id: "b9f7eba5-ae8b-11e3-8162-003048f2904a",
+			},
+			Groups: commerceml.Group{
+				IdName: commerceml.IdName{
+					Id: "de258629-6b29-11e4-8220-005056b9f84b",
+				},
+			},
+		},
+		{
+			IdName: commerceml.IdName{
+				Id: "7077e5f0-f2a5-11de-bc7e-0022b0527b2e",
+			},
+			Groups: commerceml.Group{
+				IdName: commerceml.IdName{
+					Id: "cf0c4f35-b32c-11e3-8162-003048f2904a",
+				},
+			},
+		},
+	}
+
 	assert.Equal(t, expected, products)
 }
