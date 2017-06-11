@@ -17,6 +17,7 @@ func main() {
 	user, pass, host := os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_HOST")
 
 	dbname := flag.String("db", "", "Database name")
+	path := flag.String("path", "", "Save to path")
 	flag.Parse()
 
 	dsn := fmt.Sprintf("mysql://%s:%s@tcp(%s)/%s", user, pass, host, *dbname)
@@ -55,4 +56,31 @@ func main() {
 	}*/
 	body, _ := ioutil.ReadAll(r)
 	fmt.Printf("%s", body)
+
+	file, err := os.Create(fmt.Sprintf("%s%c%s", *path, os.PathSeparator, "output.sql"))
+	if err != nil {
+		fmt.Printf("Could not create file: %s", err)
+		os.Exit(1)
+	}
+	defer func() {
+		if err := file.Close(); err != nil {
+			fmt.Printf("Fail close file: %s", err)
+			os.Exit(1)
+		}
+	}()
+	buf := make([]byte, 1024)
+	for {
+		n, err := r.Read(buf)
+		if err != nil && err != io.EOF {
+			fmt.Printf("Fail read from buffer: %s", err)
+			os.Exit(1)
+		}
+		if n == 0 {
+			break
+		}
+		if _, err := file.Write(buf[:n]); err != nil {
+			fmt.Printf("Fail write to file: %s", err)
+			os.Exit(1)
+		}
+	}
 }
