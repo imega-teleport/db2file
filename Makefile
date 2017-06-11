@@ -1,6 +1,6 @@
 CWD=/go/src/github.com/imega-teleport/db2file
 
-build: dep test
+build: test
 	@docker run --rm \
 		-v $(CURDIR):$(CWD) \
 		-w $(CWD) \

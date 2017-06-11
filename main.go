@@ -2,6 +2,7 @@ package main // import "github.com/imega-teleport/db2file"
 
 import (
 	"database/sql"
+	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -13,7 +14,11 @@ import (
 )
 
 func main() {
-	user, pass, host, dbname := "root", "", "10.0.3.94:3306", "teleport"
+	user, pass, host := os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_HOST")
+
+	dbname := flag.String("db", "", "Database name")
+	flag.Parse()
+
 	dsn := fmt.Sprintf("mysql://%s:%s@tcp(%s)/%s", user, pass, host, dbname)
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
