@@ -298,7 +298,7 @@ func makePosts(products []commerceml.Product) ([]post, []termRelationship) {
 			ParentID:        "",
 			GUID:            "",
 			MenuOrder:       0,
-			Type:            "post",
+			Type:            "product",
 			MimeType:        "",
 			CommentCount:    0,
 		}

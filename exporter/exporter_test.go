@@ -8,7 +8,7 @@ import (
 	squirrel "gopkg.in/Masterminds/squirrel.v1"
 )
 
-func Test_Terms_WithGroupLevel1_ReturnTerm(t *testing.T) {
+func Test_makeTerms_WithGroupLevel1_ReturnTerm(t *testing.T) {
 	groups := []commerceml.Group{
 		{
 			IdName: commerceml.IdName{
@@ -43,7 +43,7 @@ func Test_Terms_WithGroupLevel1_ReturnTerm(t *testing.T) {
 	}, terms)
 }
 
-func Test_Terms_WithGroupLevel2_ReturnTerm(t *testing.T) {
+func Test_makeTerms_WithGroupLevel2_ReturnTerm(t *testing.T) {
 	groups := []commerceml.Group{
 		{
 			IdName: commerceml.IdName{
@@ -118,7 +118,7 @@ func Test_Terms_WithGroupLevel2_ReturnTerm(t *testing.T) {
 	}, terms)
 }
 
-func Test_Terms_WithGroupLevel3_ReturnTerm(t *testing.T) {
+func Test_makeTerms_WithGroupLevel3_ReturnTerm(t *testing.T) {
 	groups := []commerceml.Group{
 		{
 			IdName: commerceml.IdName{
@@ -233,7 +233,7 @@ func Test_Terms_WithGroupLevel3_ReturnTerm(t *testing.T) {
 	}, terms)
 }
 
-func Test_TermsTaxonomy_WithGroupLevel1_ReturnTermTaxonomy(t *testing.T) {
+func Test_makeTerms_WithGroupLevel1_ReturnTermTaxonomy(t *testing.T) {
 	groups := []commerceml.Group{
 		{
 			IdName: commerceml.IdName{
@@ -272,7 +272,7 @@ func Test_TermsTaxonomy_WithGroupLevel1_ReturnTermTaxonomy(t *testing.T) {
 	}, termsTaxonomy)
 }
 
-func Test_TermsTaxonomy_WithGroupLevel2_ReturnTerm(t *testing.T) {
+func Test_makeTerms_WithGroupLevel2_ReturnTermTaxonomy(t *testing.T) {
 	groups := []commerceml.Group{
 		{
 			IdName: commerceml.IdName{
