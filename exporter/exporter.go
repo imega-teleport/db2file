@@ -3,7 +3,6 @@ package exporter
 import (
 	"fmt"
 	"io"
-	"reflect"
 	"strings"
 	"time"
 
@@ -20,15 +19,17 @@ type Exporter interface {
 }
 
 type woocommece struct {
-	storage storage.Store
-	prefix  string
+	storage  storage.Store
+	prefix   string
+	authorID int
 }
 
 // NewExporter return woocommece instance
-func NewExporter(storage storage.Store, prefix string) Exporter {
+func NewExporter(storage storage.Store, prefix string, authorID int) Exporter {
 	return &woocommece{
-		storage: storage,
-		prefix:  prefix,
+		storage:  storage,
+		prefix:   prefix,
+		authorID: authorID,
 	}
 }
 
@@ -51,7 +52,18 @@ func (w *woocommece) Export(writer io.WriteCloser) chan error {
 		if _, err := writer.Write([]byte("start transaction;\n")); err != nil {
 			ch <- err
 		}
-
+		if _, err := writer.Write([]byte(fmt.Sprintf("set @max_term_id=(select max(term_id) from %sterms);\n", w.prefix))); err != nil {
+			ch <- err
+		}
+		if _, err := writer.Write([]byte(fmt.Sprintf("set @max_term_taxonomy_id=(select max(term_taxonomy_id) from %sterm_taxonomy);\n", w.prefix))); err != nil {
+			ch <- err
+		}
+		if _, err := writer.Write([]byte(fmt.Sprintf("set @max_post_id=(select max(id) from %sposts);\n", w.prefix))); err != nil {
+			ch <- err
+		}
+		if _, err := writer.Write([]byte(fmt.Sprintf("set @author_id=%d;\n", w.authorID))); err != nil {
+			ch <- err
+		}
 		for k, v := range variables {
 			key := strings.Replace(slugmaker.Make(k), "-", "", -1)
 			if _, err := writer.Write([]byte(fmt.Sprintf("set @%s=%d;\n", key, v))); err != nil {
@@ -290,13 +302,14 @@ func makePosts(products []commerceml.Product) ([]post, []termRelationship) {
 			MimeType:        "",
 			CommentCount:    0,
 		}
+		variables[i.Id] = startID
 		startID++
 
 		for _, g := range i.Groups {
 			tr := termRelationship{
-				ObjectType:     &p,
-				ObjectID:       i.Id,
-				TermTaxonomyID: g.Id,
+				ObjectType:     typePost,
+				ObjectID:       uuid(i.Id),
+				TermTaxonomyID: uuid(g.Id),
 			}
 			rels = append(rels, tr)
 		}
@@ -305,10 +318,34 @@ func makePosts(products []commerceml.Product) ([]post, []termRelationship) {
 	return posts, rels
 }
 
+type objectType int
+
+const (
+	typePost objectType = iota
+	typeTerm
+)
+
+func (t objectType) String() string {
+	var ret string
+	switch t {
+	case typePost:
+		ret = "max_post_id"
+	case typeTerm:
+		ret = "max_term_id"
+	}
+	return ret
+}
+
+type uuid string
+
+func (id uuid) ToVar() string {
+	return "@" + strings.Replace(slugmaker.Make(string(id)), "-", "", -1)
+}
+
 type termRelationship struct {
-	ObjectType     interface{}
-	ObjectID       string
-	TermTaxonomyID string
+	ObjectType     objectType
+	ObjectID       uuid
+	TermTaxonomyID uuid
 	TermOrder      int
 }
 
@@ -358,18 +395,10 @@ func (b *builder) AddPost(post post) {
 }
 
 func (b *builder) AddTermRelationships(r termRelationship) {
-	var prefix string
-	switch reflect.TypeOf(*r.ObjectType) {
-	case reflect.TypeOf(post{}):
-		prefix = "max_post_id"
-	case reflect.TypeOf(term{}):
-		prefix = "max_term_id"
-	}
-
 	*b = builder{
 		b.Values(
-			squirrel.Expr(fmt.Sprintf("@%s+@%s", prefix, r.ObjectID)),
-			squirrel.Expr(fmt.Sprintf("@max_term_id+@%s", r.TermTaxonomyID)),
+			squirrel.Expr(fmt.Sprintf("@%s+%s", r.ObjectType.String(), r.ObjectID.ToVar())),
+			squirrel.Expr(fmt.Sprintf("@max_term_id+%s", r.TermTaxonomyID.ToVar())),
 			r.TermOrder,
 		),
 	}
@@ -393,19 +422,20 @@ func (b *builder) TermsTaxonomy(taxonomyID int, t []termTaxonomy) {
 
 func (w *woocommece) builderTerm() builder {
 	return builder{
-		squirrel.Insert(w.prefix+"terms").Columns("term_id", "name", "slug", "parent"),
+		squirrel.Insert(w.prefix + "terms").Columns("term_id", "name", "slug", "term_group"),
 	}
 }
 
 func (w *woocommece) builderTermTaxonomy() builder {
 	return builder{
-		squirrel.Insert(w.prefix+"term_taxonomy").Columns("term_taxonomy_id", "term_id", "taxonomy", "description", "parent", "count"),
+		squirrel.Insert(w.prefix + "term_taxonomy").Columns("term_taxonomy_id", "term_id", "taxonomy", "description", "parent", "count"),
 	}
 }
 
 func (w *woocommece) builderPost() builder {
 	return builder{
-		squirrel.Insert(w.prefix+"posts").Columns(
+		squirrel.Insert(w.prefix + "posts").Columns(
+			"id",
 			"post_author",
 			"post_date",
 			"post_date_gmt",
@@ -433,6 +463,6 @@ func (w *woocommece) builderPost() builder {
 
 func (w *woocommece) builderTermRelationships() builder {
 	return builder{
-		squirrel.Insert(w.prefix+"term_relationships").Columns("object_id", "term_taxonomy_id", "term_order"),
+		squirrel.Insert(w.prefix + "term_relationships").Columns("object_id", "term_taxonomy_id", "term_order"),
 	}
 }

@@ -1,7 +1,7 @@
 CWD=/go/src/github.com/imega-teleport/db2file
 
 build: test
-	@mkdir $(CURDIR)/test
+	@mkdir -p $(CURDIR)/test
 	@docker run --rm \
 		-v $(CURDIR)/sql:/sql \
 		--link server_db:s \

@@ -41,7 +41,7 @@ func main() {
 	}()
 
 	storage := mysql.NewStorage(db)
-	woo := exporter.NewExporter(storage, "")
+	woo := exporter.NewExporter(storage, "wp_", 1)
 	r, w := io.Pipe()
 	defer func() {
 		err = r.Close()
@@ -49,12 +49,6 @@ func main() {
 	}()
 
 	woo.Export(w)
-	/*if err := woo.Export(w); err != nil {
-		fmt.Printf("Error in export: %v", err)
-		os.Exit(1)
-	}*/
-	//body, _ := ioutil.ReadAll(r)
-	//fmt.Printf("%s", body)
 
 	file, err := os.Create(fmt.Sprintf("%s%c%s", *path, os.PathSeparator, "output.sql"))
 	if err != nil {
