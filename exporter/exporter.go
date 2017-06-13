@@ -200,18 +200,19 @@ type termTaxonomy struct {
 type taxonomyID int
 
 func (i taxonomyID) String() string {
-	return fmt.Sprintf("@max_term_taxonomy_id+%d", i)
+	ret := fmt.Sprintf("@max_term_taxonomy_id+%d", i)
+	if i == 0 {
+		ret = "0"
+	}
+	return ret
 }
 
 func makeTerms(startTermID *int, startTaxonomyID int, groups []commerceml.Group) ([]term, []termTaxonomy) {
 	var terms []term
 	var termsTaxonomy []termTaxonomy
 	for _, i := range groups {
+		*startTermID++
 		parentTaxonomyID := startTaxonomyID
-		if startTaxonomyID == 0 {
-			parentTaxonomyID = *startTermID
-		}
-
 		t := term{
 			ID:   termID(*startTermID),
 			Name: i.Name,
@@ -228,9 +229,9 @@ func makeTerms(startTermID *int, startTaxonomyID int, groups []commerceml.Group)
 			Parent:      taxonomyID(parentTaxonomyID),
 		}
 		termsTaxonomy = append(termsTaxonomy, tt)
-		*startTermID++
+
 		if len(i.Groups) > 0 {
-			childsTerms, childsTermsTaxonomy := makeTerms(startTermID, parentTaxonomyID, i.Groups)
+			childsTerms, childsTermsTaxonomy := makeTerms(startTermID, *startTermID, i.Groups)
 			terms = append(terms, childsTerms...)
 			termsTaxonomy = append(termsTaxonomy, childsTermsTaxonomy...)
 		}

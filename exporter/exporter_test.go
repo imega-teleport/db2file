@@ -24,7 +24,7 @@ func Test_makeTerms_WithGroupLevel1_ReturnTerm(t *testing.T) {
 		},
 	}
 
-	var startTermID, startTaxonomyID = 1, 0
+	var startTermID, startTaxonomyID = 0, 0
 	terms, _ := makeTerms(&startTermID, startTaxonomyID, groups)
 
 	assert.Equal(t, []term{
@@ -81,7 +81,7 @@ func Test_makeTerms_WithGroupLevel2_ReturnTerm(t *testing.T) {
 		},
 	}
 
-	var startTermID, startTaxonomyID = 1, 0
+	var startTermID, startTaxonomyID = 0, 0
 	terms, _ := makeTerms(&startTermID, startTaxonomyID, groups)
 
 	assert.Equal(t, []term{
@@ -178,7 +178,7 @@ func Test_makeTerms_WithGroupLevel3_ReturnTerm(t *testing.T) {
 		},
 	}
 
-	var startTermID, startTaxonomyID = 1, 0
+	var startTermID, startTaxonomyID = 0, 0
 	terms, _ := makeTerms(&startTermID, startTaxonomyID, groups)
 
 	assert.Equal(t, []term{
@@ -249,7 +249,7 @@ func Test_makeTerms_WithGroupLevel1_ReturnTermTaxonomy(t *testing.T) {
 		},
 	}
 
-	var startTermID, startTaxonomyID = 1, 0
+	var startTermID, startTaxonomyID = 0, 0
 	_, termsTaxonomy := makeTerms(&startTermID, startTaxonomyID, groups)
 
 	assert.Equal(t, []termTaxonomy{
@@ -258,7 +258,7 @@ func Test_makeTerms_WithGroupLevel1_ReturnTermTaxonomy(t *testing.T) {
 			TermID:      1,
 			Taxonomy:    "product_cat",
 			Description: "name1",
-			Parent:      1,
+			Parent:      0,
 			Count:       0,
 		},
 		{
@@ -266,7 +266,7 @@ func Test_makeTerms_WithGroupLevel1_ReturnTermTaxonomy(t *testing.T) {
 			TermID:      2,
 			Taxonomy:    "product_cat",
 			Description: "name2",
-			Parent:      2,
+			Parent:      0,
 			Count:       0,
 		},
 	}, termsTaxonomy)
@@ -310,7 +310,7 @@ func Test_makeTerms_WithGroupLevel2_ReturnTermTaxonomy(t *testing.T) {
 		},
 	}
 
-	var startTermID, startTaxonomyID = 1, 0
+	var startTermID, startTaxonomyID = 0, 0
 	_, termsTaxonomy := makeTerms(&startTermID, startTaxonomyID, groups)
 
 	assert.Equal(t, []termTaxonomy{
@@ -319,7 +319,7 @@ func Test_makeTerms_WithGroupLevel2_ReturnTermTaxonomy(t *testing.T) {
 			TermID:      1,
 			Taxonomy:    "product_cat",
 			Description: "name1",
-			Parent:      1,
+			Parent:      0,
 			Count:       0,
 		},
 		{
@@ -343,7 +343,7 @@ func Test_makeTerms_WithGroupLevel2_ReturnTermTaxonomy(t *testing.T) {
 			TermID:      4,
 			Taxonomy:    "product_cat",
 			Description: "name2",
-			Parent:      4,
+			Parent:      0,
 			Count:       0,
 		},
 		{
@@ -371,4 +371,12 @@ func Test_builderTermTaxonomy_WithPrefix_ReturnBuilder(t *testing.T) {
 	}
 	b := w.builderTermTaxonomy().Values("")
 	assert.Equal(t, "INSERT INTO test_term_taxonomy (term_taxonomy_id,term_id,taxonomy,description,parent,count) VALUES ('')", squirrel.DebugSqlizer(b))
+}
+
+func TestTaxonomyID_WithIndex_ReturnsVariableWithIndex(t *testing.T) {
+	assert.Equal(t, taxonomyID(1).String(), "@max_term_taxonomy_id+1")
+}
+
+func TestTaxonomyID_WithIndexZero_ReturnsZero(t *testing.T) {
+	assert.Equal(t, taxonomyID(0).String(), "0")
 }

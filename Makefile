@@ -45,9 +45,9 @@ clean:
 
 
 test: clean db
-	docker run --rm -v $(CURDIR):$(CWD) -w $(CWD) \
+	@docker run --rm -v $(CURDIR):$(CWD) -w $(CWD) \
 		golang:1.8-alpine sh -c "go list ./... | grep -v 'vendor\|integration' | xargs go test"
-	docker run --rm \
+	@docker run --rm \
 		-e DB_USER=root \
 		-e DB_PASS=1 \
 		-e DB_HOST="server_db:3306" \
