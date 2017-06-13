@@ -1,12 +1,30 @@
 package exporter
 
 import (
+	"fmt"
+	"reflect"
 	"testing"
+	"time"
 
+	"github.com/imega-teleport/db2file/storage"
 	"github.com/imega-teleport/xml2db/commerceml"
 	"github.com/stretchr/testify/assert"
 	squirrel "gopkg.in/Masterminds/squirrel.v1"
 )
+
+func EqualWithDuration(t *testing.T, expected, actual interface{}, delta time.Duration) bool {
+	a := reflect.ValueOf(actual)
+	e := reflect.ValueOf(expected)
+
+	for i := 0; i < a.NumField(); i++ {
+		if a.Field(i).Type() == reflect.TypeOf(time.Time{}) {
+			assert.WithinDuration(t, e.Field(i).Interface().(time.Time), a.Field(i).Interface().(time.Time), delta, fmt.Sprintf("Field: %s", a.Type().Field(i).Name))
+		} else {
+			assert.Equal(t, e.Field(i).Interface(), a.Field(i).Interface())
+		}
+	}
+	return true
+}
 
 func Test_makeTerms_WithGroupLevel1_ReturnTerm(t *testing.T) {
 	groups := []commerceml.Group{
@@ -374,9 +392,98 @@ func Test_builderTermTaxonomy_WithPrefix_ReturnBuilder(t *testing.T) {
 }
 
 func TestTaxonomyID_WithIndex_ReturnsVariableWithIndex(t *testing.T) {
-	assert.Equal(t, taxonomyID(1).String(), "@max_term_taxonomy_id+1")
+	assert.Equal(t, "@max_term_taxonomy_id+1", taxonomyID(1).String())
 }
 
 func TestTaxonomyID_WithIndexZero_ReturnsZero(t *testing.T) {
-	assert.Equal(t, taxonomyID(0).String(), "0")
+	assert.Equal(t, "0", taxonomyID(0).String())
+}
+
+func Test_slug_WithString_ReturnsDecodedSlug(t *testing.T) {
+	assert.Equal(t, "s_l-a-g", slug("с_л+а-г").String())
+}
+
+func Test_termID_WithIndex_ReturnsVariableWithIndex(t *testing.T) {
+	assert.Equal(t, termID(1).String(), "@max_term_id+1")
+}
+
+func Test_NewExporter_ReturnsExporter(t *testing.T) {
+	assert.Implements(t, (*Exporter)(nil), NewExporter((storage.Store)(nil), "", 1))
+}
+
+func Test_postID_WithIndex_ReturnsVariableWithIndex(t *testing.T) {
+	assert.Equal(t, "@max_post_id+1", postID(1).String())
+}
+
+func Test_authorID_WithIndex_ReturnsVariable(t *testing.T) {
+	assert.Equal(t, "@author_id", authorID(1).String())
+}
+
+func Test_makePosts_WithProducts_ReturnsPosts(t *testing.T) {
+	products := []commerceml.Product{
+		{
+			IdName: commerceml.IdName{
+				Id:   "id1",
+				Name: "name1",
+			},
+		},
+	}
+	actual, _ := makePosts(products)
+
+	expected := []post{
+		{
+			ID:            postID(1),
+			Title:         "name1",
+			Status:        "publish",
+			CommentStatus: "open",
+			PingStatus:    "open",
+			Name:          "name1",
+			Type:          "product",
+			Date:          time.Now(),
+			Modified:      time.Now(),
+		},
+	}
+
+	for k, v := range actual {
+		EqualWithDuration(t, expected[k], v, time.Second)
+	}
+}
+
+func Test_makePosts_WithProducts_ReturnsTermRelationship(t *testing.T) {
+	products := []commerceml.Product{
+		{
+			IdName: commerceml.IdName{
+				Id:   "id1",
+				Name: "name1",
+			},
+			Groups: []commerceml.Group{
+				{
+					IdName: commerceml.IdName{
+						Id: "group1",
+					},
+				},
+			},
+		},
+	}
+	_, actual := makePosts(products)
+
+	assert.Equal(t, []termRelationship{
+		{
+			ObjectType:     typePost,
+			ObjectID:       uuid("id1"),
+			TermTaxonomyID: uuid("group1"),
+		},
+	}, actual)
+}
+
+func Test_objectType_WithTypePost_ReturnsVariableName(t *testing.T) {
+	assert.Equal(t, "max_post_id", objectType(typePost).String())
+}
+
+func Test_objectType_WithTypeTerm_ReturnsVariableName(t *testing.T) {
+	assert.Equal(t, "max_term_id", objectType(typeTerm).String())
+}
+
+func Test_uuid_WithTypeTerm_ReturnsVariableName(t *testing.T) {
+	assert.Equal(t, "@abc", uuid("a-b-c").ToVar())
 }
