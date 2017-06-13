@@ -26,8 +26,8 @@ func (p *paginator) Processing(items []interface{}, forItem func(interface{}) in
 		if end > len(items) {
 			end = len(items)
 		}
-		items = items[start:end]
-		for _, i := range items {
+		cut := items[start:end]
+		for _, i := range cut {
 			page = append(page, forItem(i))
 		}
 		forPage(page)

@@ -362,7 +362,7 @@ func Test_builderTerm_WithPrefix_ReturnBuilder(t *testing.T) {
 		prefix: "test_",
 	}
 	b := w.builderTerm().Values("")
-	assert.Equal(t, "INSERT INTO test_terms (term_id,name,slug,parent) VALUES ('')", squirrel.DebugSqlizer(b))
+	assert.Equal(t, "INSERT INTO test_terms (term_id,name,slug,term_group) VALUES ('')", squirrel.DebugSqlizer(b))
 }
 
 func Test_builderTermTaxonomy_WithPrefix_ReturnBuilder(t *testing.T) {

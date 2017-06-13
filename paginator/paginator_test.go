@@ -62,8 +62,8 @@ func Test_Paginator_Processing(t *testing.T) {
 			Count:       0,
 		},
 		{
-			ID:          5,
-			TermID:      5,
+			ID:          6,
+			TermID:      6,
 			Taxonomy:    "product_cat",
 			Description: "name2-2",
 			Parent:      4,
