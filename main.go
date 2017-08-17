@@ -48,7 +48,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	if complete == false {
+	if !complete {
 		os.Exit(1)
 	}
 
