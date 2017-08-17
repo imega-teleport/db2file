@@ -18,6 +18,20 @@ func NewStorage(sqlDB *sql.DB) storageI.Store {
 	}
 }
 
+func (s *storage) CheckCompleteAllTasks() (bool, error) {
+	var completeTask = 0
+	row := s.db.QueryRow("select count(*) as compl from tasks where val = 1")
+	if err := row.Scan(&completeTask); err != nil {
+		return false, err
+	}
+
+	if completeTask == 2 {
+		return true, nil
+	}
+
+	return false, nil
+}
+
 func (s *storage) Groups(parentID string) (groups []commerceml.Group, err error) {
 	groups = []commerceml.Group{}
 	items, err := s.groups("")

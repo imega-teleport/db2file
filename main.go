@@ -41,6 +41,17 @@ func main() {
 	}()
 
 	storage := mysql.NewStorage(db)
+
+	complete, err := storage.CheckCompleteAllTasks()
+	if err != nil {
+		fmt.Printf("Fail check complete task: %s", err)
+		os.Exit(1)
+	}
+
+	if complete == false {
+		os.Exit(1)
+	}
+
 	woo := exporter.NewExporter(storage, "wp_", 1)
 	r, w := io.Pipe()
 	defer func() {
