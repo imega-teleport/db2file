@@ -221,3 +221,32 @@ func Test_Products_ReturnsProducts(t *testing.T) {
 	}
 	assert.Equal(t, expected, products)
 }
+
+func Test_CheckCompleteAllTasks_ReturnsTrue(t *testing.T) {
+	db, teardown := dbUnit.setup(t, []string{"tasks"}, func(db *sql.DB) (err error) {
+		_, err = db.Query(
+			"INSERT tasks VALUES (?,?)",
+			"store",
+			1,
+		)
+		if err != nil {
+			return
+		}
+		_, err = db.Query(
+			"INSERT tasks VALUES (?,?)",
+			"offer",
+			1,
+		)
+		if err != nil {
+			return
+		}
+		return
+	})
+	defer teardown()
+
+	s := mysql.NewStorage(db)
+	complete, err := s.CheckCompleteAllTasks()
+	assert.NoError(t, err)
+
+	assert.True(t, complete)
+}
