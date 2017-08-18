@@ -78,7 +78,7 @@ func (w *woocommece) Export(writer io.WriteCloser) chan error {
 
 		b := w.builderTerm()
 
-		p := paginator.NewPaginator(100000)
+		p := paginator.NewPaginator(100)
 
 		p.Processing(
 			values,
