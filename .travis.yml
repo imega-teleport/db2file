@@ -8,7 +8,7 @@ install:
 - gometalinter.v1 --install
 before_script:
 - make dep
-- gometalinter.v1 --vendor --deadline=300s --disable=gotype --disable=gocyclo ./...
+#- gometalinter.v1 --vendor --deadline=300s --disable=gotype --disable=gocyclo ./...
 script:
 - make build
 notifications:
