@@ -2,89 +2,123 @@ package main // import "github.com/imega-teleport/db2file"
 
 import (
 	"database/sql"
-	"flag"
 	"fmt"
-	"io"
+	"sync"
+	"flag"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/imega-teleport/db2file/exporter"
-	"github.com/imega-teleport/db2file/mysql"
+	"github.com/imega-teleport/db2file/packer"
+	"github.com/imega-teleport/db2file/storage"
+	log "github.com/sirupsen/logrus"
+	"encoding/json"
 )
 
 func main() {
 	user, pass, host := os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_HOST")
 
-	dbname := flag.String("db", "", "Database name")
-	path := flag.String("path", "", "Save to path")
+	dbname := flag.String("db", "test_teleport", "Database name")
+	path := flag.String("path", "/tmp", "Save to path")
+	limit := flag.Int("limit", 500000, "Limit bytes")
+	prefixTable := flag.String("ptable", "wp_", "Prefix table name")
+	prefixFile := flag.String("pfile", "out", "Prefix file name")
+	options := flag.String("options", "{}", "Options export")
 	flag.Parse()
 
+	optsExport := &packer.OptionsExport{}
+	err := json.Unmarshal([]byte(*options), optsExport)
+	if err != nil {
+		log.Fatalf("Could not read options, %s", err)
+	}
+
 	dsn := fmt.Sprintf("mysql://%s:%s@tcp(%s)/%s", user, pass, host, *dbname)
+
+	log.Info("Start")
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		fmt.Printf("error: %s", err)
-		os.Exit(1)
+		log.Fatalf("Could not connect db, %s", err)
 	}
 
 	err = db.Ping()
 	if err != nil {
-		fmt.Printf("error: %s", err)
-		os.Exit(1)
+		log.Fatalf("Fail ping db, %s", err)
 	}
 	defer func() {
 		err = db.Close()
 		if err != nil {
-			fmt.Printf("error: %s", err)
-			os.Exit(1)
+			log.Fatalf("Fail closes db connection, %s", err)
 		}
-		fmt.Println("Closed db connection")
+		log.Info("Closed db connection")
 	}()
 
-	storage := mysql.NewStorage(db)
+	wg := sync.WaitGroup{}
+	s := storage.NewStorage(db, 10000)
 
-	complete, err := storage.CheckCompleteAllTasks()
-	if err != nil {
-		fmt.Printf("Fail check complete task: %s", err)
-		os.Exit(1)
-	}
+	dataChan := make(chan interface{}, 10)
+	errChan := make(chan error)
 
-	if !complete {
-		os.Exit(1)
-	}
+	p := packer.New(packer.Options{
+		MaxBytes:        *limit,
+		PrefixFileName:  *prefixFile,
+		PathToSave:      *path,
+		PrefixTableName: *prefixTable,
+	}, optsExport)
 
-	woo := exporter.NewExporter(storage, "wp_", 1)
-	r, w := io.Pipe()
-	defer func() {
-		err = r.Close()
-		err = w.Close()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		s.GetGroups(dataChan, errChan)
 	}()
 
-	woo.Export(w)
-
-	file, err := os.Create(fmt.Sprintf("%s%c%s", *path, os.PathSeparator, "output.sql"))
-	if err != nil {
-		fmt.Printf("Could not create file: %s", err)
-		os.Exit(1)
-	}
-	defer func() {
-		if err := file.Close(); err != nil {
-			fmt.Printf("Fail close file: %s", err)
-			os.Exit(1)
-		}
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		s.GetProducts(dataChan, errChan)
 	}()
-	buf := make([]byte, 1024)
-	for {
-		n, err := r.Read(buf)
-		if err != nil && err != io.EOF {
-			fmt.Printf("Fail read from buffer: %s", err)
-			os.Exit(1)
-		}
-		if n == 0 {
-			break
-		}
-		if _, err := file.Write(buf[:n]); err != nil {
-			fmt.Printf("Fail write to file: %s", err)
-			os.Exit(1)
-		}
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		s.GetProductsGroups(dataChan, errChan)
+	}()
+
+	specialProperty := []string{
+		optsExport.Width,
+		optsExport.Weight,
+		optsExport.Height,
+		optsExport.Length,
+	}
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		s.GetProductsProperties(dataChan, errChan, specialProperty)
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		s.GetProductsPropertiesSpecial(dataChan, errChan, specialProperty)
+	}()
+
+	go func() {
+		p.Listen(dataChan, errChan)
+	}()
+
+	go func() {
+		wg.Wait()
+		p.SaveToFile()
+		p.SecondSaveToFile()
+		p.ThirdPackSaveToFile(true)
+		close(dataChan)
+		close(errChan)
+		log.Info("End work!")
+	}()
+
+	if err := <-errChan; err != nil {
+		log.Fatalf("%s", err)
+		close(dataChan)
+		close(errChan)
+		return
 	}
 }
