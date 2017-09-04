@@ -116,11 +116,14 @@ func (p *pkg) Listen(in <-chan interface{}, e chan<- error) {
 				Type: "post",
 				Date: time.Now(),
 			})
-			p.ThirdPack.AddItem(teleport.PostMeta{
-				PostID: teleport.UUID(v.(storage.Product).ID),
-				Key:    "_sku",
-				Value:  v.(storage.Product).Article,
-			})
+
+			if v.(storage.Product).Article != "" {
+				p.ThirdPack.AddItem(teleport.PostMeta{
+					PostID: teleport.UUID(v.(storage.Product).ID),
+					Key:    "_sku",
+					Value:  v.(storage.Product).Article,
+				})
+			}
 
 		case storage.Group:
 			p.Indexer.Set(teleport.UUID(v.(storage.Group).ID).String())
@@ -153,21 +156,7 @@ func (p *pkg) Listen(in <-chan interface{}, e chan<- error) {
 				p.PropertiesCollection.Items = append(p.PropertiesCollection.Items, v.(storage.ProductsProperties))
 			} else {
 				if p.PropertiesCollection.ProductID != v.(storage.ProductsProperties).ProductID {
-					encoder := php_serialize.NewSerializer()
-					source := map[php_serialize.PhpValue]php_serialize.PhpValue{}
-
-					for _, v := range p.PropertiesCollection.Items {
-						source[v.PropertyName] = map[php_serialize.PhpValue]php_serialize.PhpValue{
-							"name":         v.PropertyName,
-							"value":        v.Value,
-							"position":     "0",
-							"is_visible":   "1",
-							"is_variation": "0",
-							"is_taxonomy":  "0",
-						}
-					}
-
-					attrs, _ := encoder.Encode(source)
+					attrs, _ := p.SerializationProperties(p.PropertiesCollection.Items)
 					p.ThirdPack.AddItem(teleport.PostMeta{
 						PostID: teleport.UUID(v.(storage.ProductsProperties).ProductID),
 						Key:    "_product_attributes",
@@ -316,7 +305,7 @@ func (p *pkg) ThirdPackSaveToFile(latest bool) error {
 		Prefix: p.Options.PrefixTableName,
 	}
 
-	if latest {
+	if latest && len(p.PropertiesCollection.Items) > 0 {
 		attrs, _ := p.SerializationProperties(p.PropertiesCollection.Items)
 		p.ThirdPack.AddItem(teleport.PostMeta{
 			PostID: teleport.UUID(p.PropertiesCollection.ProductID),
