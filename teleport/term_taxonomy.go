@@ -45,8 +45,8 @@ func (b *builder) AddTermTaxonomy(t TermTaxonomy) {
 	*b = builder{
 		b.Values(
 			squirrel.Expr(t.TermID.ToVar()),
-			t.Taxonomy,
-			t.Description,
+			b.MysqlRealEscapeString(t.Taxonomy),
+			b.MysqlRealEscapeString(t.Description),
 			parent,
 		),
 	}

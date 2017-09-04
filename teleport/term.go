@@ -32,6 +32,11 @@ func (w *Wpwc) BuilderTerm() builder {
 
 func (b *builder) AddTerm(t Term) {
 	*b = builder{
-		b.Values(squirrel.Expr(fmt.Sprintf("@max_term_id+%s", t.ID.ToVar())), t.Name, t.Slug.String(), 0),
+		b.Values(
+			squirrel.Expr(fmt.Sprintf("@max_term_id+%s", t.ID.ToVar())),
+			b.MysqlRealEscapeString(t.Name),
+			t.Slug.String(),
+			0,
+		),
 	}
 }

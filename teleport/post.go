@@ -1,9 +1,10 @@
 package teleport
 
 import (
-	"time"
-	"gopkg.in/Masterminds/squirrel.v1"
 	"fmt"
+	"time"
+
+	"gopkg.in/Masterminds/squirrel.v1"
 )
 
 type Post struct {
@@ -46,10 +47,10 @@ func (b *builder) AddPost(post Post) {
 			squirrel.Expr("1"),
 			post.Date.Format("2006-01-02 15:04:05"),
 			post.Date.UTC().Format("2006-01-02 15:04:05"),
-			post.Content,
-			post.Title,
-			post.Excerpt,
-			post.Name,
+			b.MysqlRealEscapeString(post.Content),
+			b.MysqlRealEscapeString(post.Title),
+			b.MysqlRealEscapeString(post.Excerpt),
+			b.MysqlRealEscapeString(post.Name),
 			post.Modified.Format("2006-01-02 15:04:05"),
 			post.Modified.UTC().Format("2006-01-02 15:04:05"),
 			"product",

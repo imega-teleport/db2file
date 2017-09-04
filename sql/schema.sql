@@ -1,1 +1,2 @@
 CREATE DATABASE IF NOT EXISTS test_teleport CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE IF NOT EXISTS wp_teleport CHARACTER SET utf8 COLLATE utf8_general_ci;
