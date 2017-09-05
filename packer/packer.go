@@ -206,6 +206,7 @@ func (p *pkg) ClearContent() {
 }
 
 func (p *pkg) SaveToFile() error {
+	p.ClearContent()
 	w := writer.NewWriter(p.Options.PrefixFileName, p.Options.PathToSave)
 	fileName := w.GetFileName(p.FirstPackQty)
 	wpwc := teleport.Wpwc{
@@ -300,7 +301,7 @@ func (p *pkg) SecondSaveToFile() error {
 func (p *pkg) ThirdPackSaveToFile(latest bool) error {
 	p.ClearContent()
 	w := writer.NewWriter(fmt.Sprintf("thi/%s", p.Options.PrefixFileName), p.Options.PathToSave)
-	fileName := w.GetFileName(p.SecondPackQty)
+	fileName := w.GetFileName(p.ThirdPackQty)
 	wpwc := teleport.Wpwc{
 		Prefix: p.Options.PrefixTableName,
 	}
