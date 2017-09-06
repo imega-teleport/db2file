@@ -53,6 +53,15 @@ func main() {
 
 	wg := sync.WaitGroup{}
 	s := storage.NewStorage(db, 10000)
+	complete, err := s.CheckCompleteAllTasks()
+	if err != nil {
+		fmt.Printf("Fail check complete task: %s", err)
+		os.Exit(1)
+	}
+
+	if !complete {
+		os.Exit(1)
+	}
 
 	dataChan := make(chan interface{}, 10)
 	errChan := make(chan error)
