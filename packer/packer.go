@@ -124,6 +124,11 @@ func (p *pkg) Listen(in <-chan interface{}, e chan<- error) {
 					Value:  v.(storage.Product).Article,
 				})
 			}
+			p.ThirdPack.AddItem(teleport.PostMeta{
+				PostID: teleport.UUID(v.(storage.Product).ID),
+				Key:    "_visibility",
+				Value:  "visible",
+			})
 
 		case storage.Group:
 			p.Indexer.Set(teleport.UUID(v.(storage.Group).ID).String())
