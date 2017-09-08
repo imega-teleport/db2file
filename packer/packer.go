@@ -189,6 +189,11 @@ func (p *pkg) Listen(in <-chan interface{}, e chan<- error) {
 				Key:    "_price",
 				Value:  v.(storage.ProductsPrices).Value,
 			})
+			p.ThirdPack.AddItem(teleport.PostMeta{
+				PostID: teleport.UUID(v.(storage.ProductsPrices).ProductID),
+				Key:    "_regular_price",
+				Value:  v.(storage.ProductsPrices).Value,
+			})
 		}
 	}
 }
