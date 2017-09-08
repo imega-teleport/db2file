@@ -11,6 +11,7 @@ type Storage interface {
 	GetProductsProperties(out chan<- interface{}, e chan<- error, condition []string)
 	GetProductsPropertiesSpecial(out chan<- interface{}, e chan<- error, condition []string)
 	CheckCompleteAllTasks() (bool, error)
+	GetProductsPrices(out chan<- interface{}, e chan<- error)
 }
 
 type storage struct {

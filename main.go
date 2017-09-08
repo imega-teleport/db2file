@@ -2,16 +2,16 @@ package main // import "github.com/imega-teleport/db2file"
 
 import (
 	"database/sql"
-	"fmt"
-	"sync"
 	"flag"
+	"fmt"
 	"os"
+	"sync"
 
+	"encoding/json"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/imega-teleport/db2file/packer"
 	"github.com/imega-teleport/db2file/storage"
 	log "github.com/sirupsen/logrus"
-	"encoding/json"
 )
 
 func main() {
@@ -108,6 +108,12 @@ func main() {
 	go func() {
 		defer wg.Done()
 		s.GetProductsPropertiesSpecial(dataChan, errChan, specialProperty)
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		s.GetProductsPrices(dataChan, errChan)
 	}()
 
 	go func() {
