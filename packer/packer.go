@@ -271,7 +271,7 @@ func (p *pkg) SaveToFile() error {
 	p.PreContent("start transaction")
 
 	if p.FirstPackQty == 1 {
-		p.PreContent(fmt.Sprintf("create table if not exists %steleport_item(guid char(32)not null,type char(8)not null,id bigint,date datetime,primary key(`guid`))engine=innodb default charset=utf8", p.Options.PrefixTableName))
+		p.PreContent(fmt.Sprintf("create table if not exists %steleport_item(guid char(80)not null,type char(8)not null,id bigint,date datetime,primary key(`guid`))engine=innodb default charset=utf8", p.Options.PrefixTableName))
 	}
 
 	err := w.WriteFile(fileName, p.Content)
