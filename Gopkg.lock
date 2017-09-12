@@ -20,6 +20,12 @@
   version = "v1.1.1"
 
 [[projects]]
+  name = "github.com/h2non/filetype"
+  packages = ["."]
+  revision = "22e255079ab40241c671d457081831d972f0436b"
+  version = "v1.0.3"
+
+[[projects]]
   branch = "master"
   name = "github.com/lann/builder"
   packages = ["."]
@@ -57,6 +63,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/yvasiyarov/php_session_decoder"
+  packages = ["php_serialize"]
+  revision = "c71d3c8869fef0806db6f109afff2f77ef874329"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
   revision = "81e90905daefcd6fd217b62423c0908922eadb30"
@@ -73,9 +85,15 @@
   packages = ["."]
   revision = "a6b93000bd219143c56c16e6cb1c4b91da3f224b"
 
+[[projects]]
+  name = "gopkg.in/h2non/filetype.v1"
+  packages = ["matchers","types"]
+  revision = "32ffe497a1cce9df61b53fca1a221c6de11d7cee"
+  version = "v1.0.2"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "65235a6ca09ff3d1d3a9ac5308de5ede170ee61ab5bbabecce0d34e13c1b5b03"
+  inputs-digest = "bacb1e081528be57c586a82f0d95b826a29046a3ab3e9bb2895b75780ee38975"
   solver-name = "gps-cdcl"
   solver-version = 1

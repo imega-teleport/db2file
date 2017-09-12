@@ -4,6 +4,10 @@ import (
 	"image"
 	_ "image/jpeg"
 	_ "image/png"
+	"io"
+	"os"
+
+	"github.com/h2non/filetype"
 )
 
 type ImageInfo struct {
@@ -13,20 +17,34 @@ type ImageInfo struct {
 	Name   string
 }
 
-func GetImageInfo(filename string) ImageInfo {
-	file, err := os.Open(imagePath)
+func GetImageInfo(filename string) (ImageInfo, error) {
+	file, err := os.Open(filename)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%v\n", err)
+		return ImageInfo{}, err
 	}
 	defer file.Close()
 
 	image, _, err := image.DecodeConfig(file)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %v\n", imagePath, err)
+		return ImageInfo{}, err
+	}
+
+	file.Seek(0, 0)
+	buffer := make([]byte, 512)
+	n, err := file.Read(buffer)
+	if err != nil && err != io.EOF {
+		return ImageInfo{}, err
+	}
+
+	kind, err := filetype.Match(buffer[:n])
+	if err != nil {
+		return ImageInfo{}, err
 	}
 
 	return ImageInfo{
 		Width:  image.Width,
 		Height: image.Height,
-	}
+		Mime:   kind.MIME.Value,
+		Name:   file.Name(),
+	}, nil
 }
