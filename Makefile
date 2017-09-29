@@ -23,7 +23,6 @@ build: test
 db:
 	@touch $(CURDIR)/mysql.log
 	@docker run -d \
-		-p 3306:3306 \
 		--name "server_db" \
 		-v $(CURDIR)/sql/cnf:/etc/mysql/conf.d \
 		-v $(CURDIR)/mysql.log:/var/log/mysql/mysql.log \
