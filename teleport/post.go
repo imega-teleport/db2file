@@ -7,6 +7,7 @@ import (
 	"gopkg.in/Masterminds/squirrel.v1"
 )
 
+// Post is a record for WP
 type Post struct {
 	ID       UUID
 	AuthorID int
@@ -16,12 +17,16 @@ type Post struct {
 	Excerpt  string
 	Name     string
 	Modified time.Time
+	Type     string
+	ParentID UUID
 }
 
+// SizeOf return size a query
 func (p Post) SizeOf() int {
 	return len(p.ID) + (lengthDefineDate * 4) + len(p.Name) + len(p.Title) + len(p.Content) + len(p.Excerpt) + lengthDefineIndex
 }
 
+// BuilderPost return builder
 func (w *Wpwc) BuilderPost() builder {
 	return builder{
 		squirrel.Insert(fmt.Sprintf("%sposts", w.Prefix)).Columns(
@@ -35,6 +40,7 @@ func (w *Wpwc) BuilderPost() builder {
 			"post_name",
 			"post_modified",
 			"post_modified_gmt",
+			"post_parent",
 			"post_type",
 		),
 	}
@@ -53,7 +59,8 @@ func (b *builder) AddPost(post Post) {
 			b.MysqlRealEscapeString(post.Name),
 			post.Modified.Format("2006-01-02 15:04:05"),
 			post.Modified.UTC().Format("2006-01-02 15:04:05"),
-			"product",
+			squirrel.Expr(post.ParentID.ToVar()),
+			post.Type,
 		),
 	}
 }

@@ -22,6 +22,7 @@ type Packer interface {
 	ThirdPackSaveToFile(latest bool) error
 }
 
+// Options настройки пакета
 type Options struct {
 	MaxBytes        int
 	PrefixFileName  string
@@ -29,6 +30,7 @@ type Options struct {
 	PrefixTableName string
 }
 
+// OptionsExport набор специфических свойств, которые требуется с указания пользователя разместить
 type OptionsExport struct {
 	Weight    string `json: "weight"`
 	Length    string `json: "length"`
@@ -110,6 +112,7 @@ func (p *pkg) Listen(in <-chan interface{}, e chan<- error) {
 				Excerpt:  "",
 				Name:     v.(storage.Product).Name,
 				Modified: time.Now(),
+				Type:     "product",
 			})
 			p.FirstPack.AddItem(teleport.TeleportItem{
 				GUID: teleport.UUID(v.(storage.Product).ID),
@@ -194,6 +197,19 @@ func (p *pkg) Listen(in <-chan interface{}, e chan<- error) {
 				Key:    "_regular_price",
 				Value:  v.(storage.ProductsPrices).Value,
 			})
+
+		case storage.ProductImage:
+			p.ThirdPack.AddItem(teleport.Post{
+				AuthorID: 1,
+				Date:     time.Now(),
+				Content:  v.(storage.Product).Description,
+				Title:    v.(storage.Product).Name,
+				Excerpt:  "",
+				Name:     v.(storage.Product).Name,
+				Modified: time.Now(),
+				Type:     "image",
+				ParentID: teleport.UUID(v.(storage.ProductImage).ProductID),
+			})
 		}
 	}
 }
@@ -260,7 +276,7 @@ func (p *pkg) SaveToFile() error {
 	}
 
 	if len(idx.GetAll()) > 0 {
-		for k, _ := range idx.GetAll() {
+		for k := range idx.GetAll() {
 			if k != "" {
 				p.PreContent(fmt.Sprintf("set @%s=%d", k, p.Indexer.Get(k)))
 			}
@@ -304,7 +320,7 @@ func (p *pkg) SecondSaveToFile() error {
 	}
 
 	if len(idx.GetAll()) > 0 {
-		for k, _ := range idx.GetAll() {
+		for k := range idx.GetAll() {
 			if k != "" {
 				p.PreContent(fmt.Sprintf("set @%s=(select id from %steleport_item where guid='%s')", k, wpwc.Prefix, k))
 			}
@@ -355,7 +371,7 @@ func (p *pkg) ThirdPackSaveToFile(latest bool) error {
 	}
 
 	if len(idxTermTaxonomy.GetAll()) > 0 {
-		for k, _ := range idxTermTaxonomy.GetAll() {
+		for k := range idxTermTaxonomy.GetAll() {
 			if k != "" {
 				p.PreContent(fmt.Sprintf("set @%s=(select term_taxonomy_id from wp_term_taxonomy where term_id=(select id from %steleport_item where guid='%s'))", k, wpwc.Prefix, k))
 			}
@@ -363,7 +379,7 @@ func (p *pkg) ThirdPackSaveToFile(latest bool) error {
 	}
 
 	if len(idxPost.GetAll()) > 0 {
-		for k, _ := range idxPost.GetAll() {
+		for k := range idxPost.GetAll() {
 			if k != "" {
 				p.PreContent(fmt.Sprintf("set @%s=(select id from %steleport_item where guid='%s')", k, wpwc.Prefix, k))
 			}

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 )
 
+// Storage is a interface
 type Storage interface {
 	GetGroups(out chan<- interface{}, e chan<- error)
 	GetProducts(out chan<- interface{}, e chan<- error)
@@ -12,6 +13,7 @@ type Storage interface {
 	GetProductsPropertiesSpecial(out chan<- interface{}, e chan<- error, condition []string)
 	CheckCompleteAllTasks() (bool, error)
 	GetProductsPrices(out chan<- interface{}, e chan<- error)
+	GetProductsImages(out chan<- interface{}, e chan<- error)
 }
 
 type storage struct {
@@ -19,6 +21,7 @@ type storage struct {
 	limit int
 }
 
+// NewStorage get new instance
 func NewStorage(db *sql.DB, limit int) Storage {
 	return &storage{
 		db:    db,

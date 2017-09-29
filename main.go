@@ -116,6 +116,12 @@ func main() {
 		s.GetProductsPrices(dataChan, errChan)
 	}()
 
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		s.GetProductsImages(dataChan, errChan)
+	}()
+
 	go func() {
 		p.Listen(dataChan, errChan)
 	}()
