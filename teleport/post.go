@@ -15,10 +15,12 @@ type Post struct {
 	Content  string
 	Title    string
 	Excerpt  string
+	Status   string
 	Name     string
 	Modified time.Time
-	Type     string
 	ParentID UUID
+	Type     string
+	MimeType string
 }
 
 // SizeOf return size a query
@@ -37,11 +39,13 @@ func (w *Wpwc) BuilderPost() builder {
 			"post_content",
 			"post_title",
 			"post_excerpt",
+			"post_status",
 			"post_name",
 			"post_modified",
 			"post_modified_gmt",
 			"post_parent",
 			"post_type",
+			"post_mime_type",
 		),
 	}
 }
@@ -56,11 +60,13 @@ func (b *builder) AddPost(post Post) {
 			b.MysqlRealEscapeString(post.Content),
 			b.MysqlRealEscapeString(post.Title),
 			b.MysqlRealEscapeString(post.Excerpt),
+			post.Status,
 			b.MysqlRealEscapeString(post.Name),
 			post.Modified.Format("2006-01-02 15:04:05"),
 			post.Modified.UTC().Format("2006-01-02 15:04:05"),
 			squirrel.Expr(post.ParentID.ToVar()),
 			post.Type,
+			post.MimeType,
 		),
 	}
 }

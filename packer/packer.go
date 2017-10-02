@@ -6,6 +6,7 @@ import (
 	"time"
 
 	slugmaker "github.com/gosimple/slug"
+	"github.com/imega-teleport/db2file/imager"
 	"github.com/imega-teleport/db2file/indexer"
 	"github.com/imega-teleport/db2file/storage"
 	"github.com/imega-teleport/db2file/teleport"
@@ -27,6 +28,7 @@ type Options struct {
 	MaxBytes        int
 	PrefixFileName  string
 	PathToSave      string
+	PathToImages    string
 	PrefixTableName string
 }
 
@@ -110,6 +112,7 @@ func (p *pkg) Listen(in <-chan interface{}, e chan<- error) {
 				Content:  v.(storage.Product).Description,
 				Title:    v.(storage.Product).Name,
 				Excerpt:  "",
+				Status:   "publish",
 				Name:     v.(storage.Product).Name,
 				Modified: time.Now(),
 				Type:     "product",
@@ -199,16 +202,21 @@ func (p *pkg) Listen(in <-chan interface{}, e chan<- error) {
 			})
 
 		case storage.ProductImage:
+			info, _ := imager.GetImageInfo(fmt.Sprintf("%s/%s", p.Options.PathToImages, v.(storage.ProductImage).URL))
+			/*if err != nil {
+				return err
+			}*/
 			p.ThirdPack.AddItem(teleport.Post{
 				AuthorID: 1,
 				Date:     time.Now(),
-				Content:  v.(storage.Product).Description,
-				Title:    v.(storage.Product).Name,
+				Title:    info.Name,
 				Excerpt:  "",
-				Name:     v.(storage.Product).Name,
+				Status:   "inherit",
+				Name:     info.Name,
 				Modified: time.Now(),
-				Type:     "image",
 				ParentID: teleport.UUID(v.(storage.ProductImage).ProductID),
+				Type:     "attachment",
+				MimeType: info.Mime,
 			})
 		}
 	}

@@ -22,6 +22,7 @@ func main() {
 	limit := flag.Int("limit", 500000, "Limit bytes")
 	prefixTable := flag.String("ptable", "wp_", "Prefix table name")
 	prefixFile := flag.String("pfile", "out", "Prefix file name")
+	imgPath := flag.String("imgs", "/tmp", "Path to images")
 	options := flag.String("options", "{}", "Options export")
 	flag.Parse()
 
@@ -70,6 +71,7 @@ func main() {
 		MaxBytes:        *limit,
 		PrefixFileName:  *prefixFile,
 		PathToSave:      *path,
+		PathToImages:    *imgPath,
 		PrefixTableName: *prefixTable,
 	}, optsExport)
 
