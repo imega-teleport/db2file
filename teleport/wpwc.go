@@ -52,6 +52,7 @@ func (p *SecondPackage) AddItem(item interface{}) {
 type ThirdPackage struct {
 	TermRelationship []TermRelationship
 	PostMeta         []PostMeta
+	Post             []Post
 	Length           int
 }
 
@@ -63,6 +64,9 @@ func (p *ThirdPackage) AddItem(item interface{}) {
 	case PostMeta:
 		p.Length = p.Length + item.(PostMeta).SizeOf()
 		p.PostMeta = append(p.PostMeta, item.(PostMeta))
+	case Post:
+		p.Length = p.Length + item.(Post).SizeOf()
+		p.Post = append(p.Post, item.(Post))
 	}
 }
 

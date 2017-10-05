@@ -6,7 +6,6 @@ import (
 	"time"
 
 	slugmaker "github.com/gosimple/slug"
-	"github.com/imega-teleport/db2file/imager"
 	"github.com/imega-teleport/db2file/indexer"
 	"github.com/imega-teleport/db2file/storage"
 	"github.com/imega-teleport/db2file/teleport"
@@ -202,22 +201,7 @@ func (p *pkg) Listen(in <-chan interface{}, e chan<- error) {
 			})
 
 		case storage.ProductImage:
-			info, _ := imager.GetImageInfo(fmt.Sprintf("%s/%s", p.Options.PathToImages, v.(storage.ProductImage).URL))
-			/*if err != nil {
-				return err
-			}*/
-			p.ThirdPack.AddItem(teleport.Post{
-				AuthorID: 1,
-				Date:     time.Now(),
-				Title:    info.Name,
-				Excerpt:  "",
-				Status:   "inherit",
-				Name:     info.Name,
-				Modified: time.Now(),
-				ParentID: teleport.UUID(v.(storage.ProductImage).ProductID),
-				Type:     "attachment",
-				MimeType: info.Mime,
-			})
+			p.productImagePack(v.(storage.ProductImage))
 		}
 	}
 }
@@ -341,8 +325,13 @@ func (p *pkg) SecondSaveToFile() error {
 
 func (p *pkg) ThirdPackSaveToFile(latest bool) error {
 	p.ClearContent()
-	w := writer.NewWriter(fmt.Sprintf("thi/%s", p.Options.PrefixFileName), p.Options.PathToSave)
-	fileName := w.GetFileName(p.ThirdPackQty)
+	p.ThirdPackToContent(latest)
+	err := p.Write("thi", p.ThirdPackQty)
+	return err
+}
+
+// ThirdPackToContent подготовка содержимого пакета к записи в файл
+func (p *pkg) ThirdPackToContent(latest bool) error {
 	wpwc := teleport.Wpwc{
 		Prefix: p.Options.PrefixTableName,
 	}
@@ -356,6 +345,7 @@ func (p *pkg) ThirdPackSaveToFile(latest bool) error {
 		})
 	}
 
+	idx := indexer.NewIndexer()
 	idxTermTaxonomy := indexer.NewIndexer()
 	idxPost := indexer.NewIndexer()
 
@@ -378,6 +368,15 @@ func (p *pkg) ThirdPackSaveToFile(latest bool) error {
 		p.AddContent(squirrel.DebugSqlizer(builder))
 	}
 
+	if len(p.ThirdPack.Post) > 0 {
+		builder := wpwc.BuilderPost()
+		for _, v := range p.ThirdPack.Post {
+			idx.Set(v.ID.String())
+			builder.AddPost(v)
+		}
+		p.AddContent(squirrel.DebugSqlizer(builder))
+	}
+
 	if len(idxTermTaxonomy.GetAll()) > 0 {
 		for k := range idxTermTaxonomy.GetAll() {
 			if k != "" {
@@ -394,6 +393,22 @@ func (p *pkg) ThirdPackSaveToFile(latest bool) error {
 		}
 	}
 
+	if len(idx.GetAll()) > 0 {
+		for k := range idx.GetAll() {
+			if k != "" {
+				p.PreContent(fmt.Sprintf("set @%s=%d", k, idx.Get(k)))
+			}
+		}
+	}
+
+	p.PreContent(fmt.Sprintf("set @max_post_id=(select ifnull(max(id),0)from %sposts)", p.Options.PrefixTableName))
+
+	return nil
+}
+
+func (p *pkg) Write(name string, idx int) error {
+	w := writer.NewWriter(fmt.Sprintf("%s/%s", name, p.Options.PrefixFileName), p.Options.PathToSave)
+	fileName := w.GetFileName(idx)
 	err := w.WriteFile(fileName, p.Content)
 	return err
 }

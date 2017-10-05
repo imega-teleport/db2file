@@ -24,7 +24,7 @@ func GetImageInfo(filename string) (ImageInfo, error) {
 	}
 	defer file.Close()
 
-	image, _, err := image.DecodeConfig(file)
+	img, _, err := image.DecodeConfig(file)
 	if err != nil {
 		return ImageInfo{}, err
 	}
@@ -42,8 +42,8 @@ func GetImageInfo(filename string) (ImageInfo, error) {
 	}
 
 	return ImageInfo{
-		Width:  image.Width,
-		Height: image.Height,
+		Width:  img.Width,
+		Height: img.Height,
 		Mime:   kind.MIME.Value,
 		Name:   file.Name(),
 	}, nil
