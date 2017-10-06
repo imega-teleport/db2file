@@ -368,15 +368,6 @@ func (p *pkg) ThirdPackToContent(latest bool) error {
 		p.AddContent(squirrel.DebugSqlizer(builder))
 	}
 
-	if len(p.ThirdPack.Post) > 0 {
-		builder := wpwc.BuilderPost()
-		for _, v := range p.ThirdPack.Post {
-			idx.Set(v.ID.String())
-			builder.AddPost(v)
-		}
-		p.AddContent(squirrel.DebugSqlizer(builder))
-	}
-
 	if len(idxTermTaxonomy.GetAll()) > 0 {
 		for k := range idxTermTaxonomy.GetAll() {
 			if k != "" {
@@ -391,6 +382,15 @@ func (p *pkg) ThirdPackToContent(latest bool) error {
 				p.PreContent(fmt.Sprintf("set @%s=(select id from %steleport_item where guid='%s')", k, wpwc.Prefix, k))
 			}
 		}
+	}
+
+	if len(p.ThirdPack.Post) > 0 {
+		builder := wpwc.BuilderPost()
+		for _, v := range p.ThirdPack.Post {
+			idx.Set(v.ID.String())
+			builder.AddPost(v)
+		}
+		p.PreContent(squirrel.DebugSqlizer(builder))
 	}
 
 	if len(idx.GetAll()) > 0 {
