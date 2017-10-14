@@ -16,7 +16,7 @@ func (p *pkg) productImagePack(item storage.ProductImage) error {
 		return err
 	}
 	p.ThirdPack.AddItem(teleport.Post{
-		ID:       teleport.UUID(fmt.Sprintf("%s_img", item.ProductID)),
+		ID:       teleport.UUID(fmt.Sprintf("%s_img_%s", item.ProductID, item.EntityID)),
 		AuthorID: 1,
 		Date:     time.Now(),
 		Title:    info.Name,
